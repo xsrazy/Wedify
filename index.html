@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedify — Undangan Digital ala Spotify | Jual Beli Undangan? Di Sini Gratis & Open Source</title>
+<meta name="description" content="Wedify adalah template undangan pernikahan digital dengan tampilan ala aplikasi streaming musik. Buat kamu yang lagi cari tempat jual undangan digital atau mau beli template undangan online: Wedify gratis dan open source. Fitur cover album, player musik asli, rundown ala tracklist, RSVP, buku tamu, love gift, dan galeri.">
+<meta name="keywords" content="jual undangan digital, beli undangan digital, jual beli undangan online, template undangan spotify, undangan digital gratis, undangan pernikahan online, wedify, template undangan open source">
+<meta name="author" content="Usra">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#121212">
+<link rel="canonical" href="https://wedify.xsrazy.web.id/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wedify">
+<meta property="og:title" content="Wedify — Undangan Digital ala Spotify | Jual Beli Undangan? Di Sini Gratis & Open Source">
+<meta property="og:description" content="Template undangan pernikahan digital rasa aplikasi streaming musik: cover album, player musik, tracklist acara, RSVP, buku tamu, love gift. Gratis & open source, nggak perlu beli.">
+<meta property="og:url" content="https://wedify.xsrazy.web.id/">
+<meta property="og:image" content="https://wedify.xsrazy.web.id/assets/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Wedify — Usra & Zee: The Wedding Album, undangan digital ala Spotify">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wedify — Undangan Digital ala Spotify">
+<meta name="twitter:description" content="Undangan pernikahan digital rasa streaming musik. Gratis & open source: cover album, player musik, RSVP, buku tamu, love gift.">
+<meta name="twitter:image" content="https://wedify.xsrazy.web.id/assets/images/og-image.jpg">
+<link rel="icon" href="/assets/images/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/assets/images/icon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Wedify","url":"https://wedify.xsrazy.web.id/","description":"Template undangan pernikahan digital ala aplikasi streaming musik. Gratis dan open source.","inLanguage":"id"}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<!-- ============ COVER / ALBUM GATE ============ -->
+<div id="cover">
+  <div class="cover-inner">
+    <div class="cover-brand"><span class="logo-dot">▶</span> WEDIFY</div>
+    <img class="cover-art" src="/assets/images/album.webp" alt="Usra & Zee: The Wedding Album">
+    <div class="cover-label">WEDIFY ORIGINAL SOUNDTRACK • 2050</div>
+    <h1 class="cover-title">Usra &amp; Zee:<br>The Wedding Album</h1>
+    <div class="cover-artist">Album • Usra &amp; Zee</div>
+    <div class="cover-guest" id="coverGuest" hidden>
+      <div class="cg-label">Made for you</div>
+      <div class="cg-name" id="guestName">Tamu Undangan</div>
+    </div>
+    <button id="openBtn" class="play-big" aria-label="Putar undangan">
+      <span class="play-triangle">▶</span>
+    </button>
+    <div class="cover-cta">Putar Undangan</div>
+    <div class="cover-meta">100% match • 2 tracks • 1 hari spesial</div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="brand"><span class="logo-dot">▶</span> WEDIFY</div>
+    <div class="top-guest" id="topGuest"></div>
+  </header>
+
+  <main>
+    <!-- NOW PLAYING -->
+    <section class="now-playing">
+      <img class="np-art" src="/assets/images/album.webp" alt="Cover album Usra & Zee">
+      <div class="np-info">
+        <div class="np-label">NOW PLAYING</div>
+        <h2 class="np-title">Menikah (Official Invitation)</h2>
+        <div class="np-artist">Usra &amp; Zee</div>
+        <div class="np-meta">100% match • 2050 • Single • Untuk: <span id="npGuest">kamu</span></div>
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="card countdown-card">
+      <div class="card-label">COUNTDOWN MENUJU HARI H</div>
+      <div class="countdown">
+        <div class="cd-cell"><div class="cd-num" id="cdDays">0</div><div class="cd-lab">Hari</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cdHours">0</div><div class="cd-lab">Jam</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cdMins">0</div><div class="cd-lab">Menit</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cdSecs">0</div><div class="cd-lab">Detik</div></div>
+      </div>
+      <div class="cd-date">Senin, 17 Januari 2050 • Jam Gadang, Bukittinggi</div>
+    </section>
+
+    <!-- TRACKLIST / RUNDOWN -->
+    <section class="card">
+      <div class="section-head">
+        <h3>Tracklist Acara</h3>
+        <span class="section-sub">2 tracks • putar sampai selesai</span>
+      </div>
+      <div class="track">
+        <div class="track-num">1</div>
+        <div class="track-main">
+          <div class="track-title">Akad Nikah</div>
+          <div class="track-meta">Senin, 17 Januari 2050 • 10.00 WIB • Jam Gadang</div>
+        </div>
+        <div class="track-dur">10:00</div>
+      </div>
+      <div class="track">
+        <div class="track-num">2</div>
+        <div class="track-main">
+          <div class="track-title">Resepsi</div>
+          <div class="track-meta">Senin, 17 Januari 2050 • 13.00 WIB • Jam Gadang</div>
+        </div>
+        <div class="track-dur">13:00</div>
+      </div>
+      <div class="venue">
+        <div class="venue-name">Jam Gadang</div>
+        <div class="venue-addr">Jl. Raya Bukittinggi - Payakumbuh, Benteng Pasar Atas, Bukittinggi, Sumatera Barat</div>
+        <div class="chip-row">
+          <span class="chip">Dress code: Batik</span>
+          <span class="chip">Dominasi warna hitam</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-green" href="https://www.google.com/maps/search/?api=1&query=Jam+Gadang+Bukittinggi" target="_blank" rel="noopener">Lihat Google Maps</a>
+          <a class="btn btn-ghost" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Akad+Nikah+Usra+%26+Zee&dates=20500117T030000Z/20500117T040000Z&details=Akad+nikah+Usra+%26+Zee+di+Jam+Gadang,+Bukittinggi&location=Jam+Gadang,+Bukittinggi" target="_blank" rel="noopener">Save The Date</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARTISTS -->
+    <section class="card">
+      <div class="section-head"><h3>Tentang Artis</h3><span class="section-sub">duo paling ditunggu 2050</span></div>
+      <div class="artist">
+        <img class="artist-ava" src="/assets/images/cowo.webp" alt="Usra">
+        <div class="artist-main">
+          <div class="artist-name">Usra <span class="verified">✔ Verified Artist</span></div>
+          <div class="artist-sub">Putra dari Bapak ... &amp; Ibu ... • 1.205 pendengar bulanan</div>
+        </div>
+        <button class="follow-btn" type="button">Follow</button>
+      </div>
+      <div class="artist">
+        <img class="artist-ava" src="/assets/images/cewe.webp" alt="Zee">
+        <div class="artist-main">
+          <div class="artist-name">Zee <span class="verified">✔ Verified Artist</span></div>
+          <div class="artist-sub">Putri dari Bapak ... &amp; Ibu ... • 1.748 pendengar bulanan</div>
+        </div>
+        <button class="follow-btn" type="button">Follow</button>
+      </div>
+    </section>
+
+    <!-- WRAPPED -->
+    <section class="card">
+      <div class="section-head"><h3>Wedify Wrapped</h3><span class="section-sub">statistik resmi duo ini</span></div>
+      <div class="wrapped-grid">
+        <div class="wstat wstat-green"><div class="w-num">100%</div><div class="w-lab">Match sejak pertama denger</div></div>
+        <div class="wstat"><div class="w-num" id="wDays">0</div><div class="w-lab">Hari menuju panggung utama</div></div>
+        <div class="wstat"><div class="w-num">2</div><div class="w-lab">Track spesial di album ini</div></div>
+        <div class="wstat"><div class="w-num">Takdir</div><div class="w-lab">Genre teratas tahun ini</div></div>
+        <div class="wstat"><div class="w-num">∞</div><div class="w-lab">Menit didengarkan: seumur hidup</div></div>
+        <div class="wstat"><div class="w-num">Usra × Zee</div><div class="w-lab">Kolaborasi terbaik sepanjang masa</div></div>
+      </div>
+    </section>
+
+    <!-- LYRICS / DOA -->
+    <section class="card lyrics">
+      <div class="card-label light">LIRIK • AYAT SUCI</div>
+      <p class="lyrics-text">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</p>
+      <div class="lyrics-src">QS. Ar-Rum ayat 21</div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="card">
+      <div class="section-head"><h3>Album Lainnya</h3><span class="section-sub">galeri Usra &amp; Zee</span></div>
+      <div class="gallery">
+        <img src="https://picsum.photos/seed/wedify1/600/600" alt="Galeri 1" loading="lazy">
+        <img src="https://picsum.photos/seed/wedify2/600/600" alt="Galeri 2" loading="lazy">
+        <img src="https://picsum.photos/seed/wedify3/600/600" alt="Galeri 3" loading="lazy">
+        <img src="https://picsum.photos/seed/wedify4/600/600" alt="Galeri 4" loading="lazy">
+        <img src="https://picsum.photos/seed/wedify5/600/600" alt="Galeri 5" loading="lazy">
+        <img src="https://picsum.photos/seed/wedify6/600/600" alt="Galeri 6" loading="lazy">
+      </div>
+    </section>
+
+    <!-- LOVE GIFT / MERCH -->
+    <section class="card">
+      <div class="section-head"><h3>Merch Eksklusif</h3><span class="section-sub">love gift buat yang nggak bisa hadir</span></div>
+      <div class="gift">
+        <div class="gift-name">SeaBank</div>
+        <div class="gift-num">•••• •••• •••• 4848</div>
+        <div class="gift-owner">a.n. Rahmatul Usra</div>
+        <button class="btn btn-ghost salin-btn" type="button" data-copy="123456784848">Salin Nomor</button>
+      </div>
+      <div class="gift">
+        <div class="gift-name">DANA</div>
+        <div class="gift-num">•••• •••• 1748</div>
+        <div class="gift-owner">a.n. Rahmatul Usra</div>
+        <button class="btn btn-ghost salin-btn" type="button" data-copy="081234561748">Salin Nomor</button>
+      </div>
+    </section>
+
+    <!-- RSVP + GUESTBOOK -->
+    <section class="card">
+      <div class="section-head"><h3>RSVP &amp; Ucapan</h3><span class="section-sub">follow artisnya, tinggalin komentar</span></div>
+      <form id="wishForm">
+        <label class="f-lab">Nama
+          <input class="f-in" id="wishName" type="text" placeholder="Nama kamu" required maxlength="60">
+        </label>
+        <label class="f-lab">Konfirmasi Kehadiran
+          <select class="f-in" id="wishPresence">
+            <option value="Datang">Datang, insya Allah</option>
+            <option value="Berhalangan">Berhalangan</option>
+            <option value="Masih Ragu">Masih ragu</option>
+          </select>
+        </label>
+        <label class="f-lab">Ucapan &amp; Doa
+          <textarea class="f-in" id="wishMsg" rows="3" placeholder="Tulis ucapan buat Usra & Zee..." required maxlength="500"></textarea>
+        </label>
+        <button class="btn btn-green btn-block" type="submit">Kirim Ucapan</button>
+      </form>
+      <div class="wish-list" id="wishList"></div>
+      <div class="wish-empty" id="wishEmpty">Belum ada ucapan. Jadi yang pertama ngasih komentar di album ini.</div>
+    </section>
+
+    <!-- SHARE -->
+    <section class="card">
+      <div class="section-head"><h3>Bagikan Album Ini</h3></div>
+      <div class="btn-row wrap">
+        <a class="btn btn-ghost" id="shareWa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn btn-ghost" id="shareTg" href="#" target="_blank" rel="noopener">Telegram</a>
+        <a class="btn btn-ghost" id="shareFb" href="#" target="_blank" rel="noopener">Facebook</a>
+        <a class="btn btn-ghost" id="shareX" href="#" target="_blank" rel="noopener">X</a>
+        <button class="btn btn-ghost salin-btn" type="button" data-copy-link="1">Salin Link</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="brand small"><span class="logo-dot">▶</span> WEDIFY</div>
+      <p>Template undangan digital open source. Gratis dipakai dan dimodifikasi (lisensi MIT).<br>
+      Terinspirasi dari tampilan aplikasi streaming musik; bukan afiliasi Spotify.<br>
+      Build with ❤ Usra • <a href="https://github.com/xsrazy/Wedify" target="_blank" rel="noopener">github.com/xsrazy/Wedify</a></p>
+    </footer>
+  </main>
+
+  <!-- PLAYER BAR -->
+  <div class="player">
+    <img class="player-art" src="/assets/images/album.webp" alt="">
+    <div class="player-main">
+      <div class="player-title">Menikah (Official Invitation)</div>
+      <div class="player-artist">Usra &amp; Zee</div>
+      <div class="player-progress"><div class="player-bar" id="playerBar"></div></div>
+    </div>
+    <div class="player-time"><span id="curTime">0:00</span>/<span id="durTime">0:00</span></div>
+    <button id="likeBtn" class="like-btn" aria-label="Suka">♡</button>
+    <button id="playBtn" class="play-btn" aria-label="Putar atau jeda">▶</button>
+  </div>
+</div>
+
+<audio id="audio" src="/assets/music/sound.mp3" loop preload="auto"></audio>
+<script src="/js/app.js"></script>
+</body>
+</html>

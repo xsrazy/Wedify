@@ -1,0 +1,185 @@
+:root{
+  --bg:#121212; --panel:#181818; --panel2:#1f1f1f; --line:#2a2a2a;
+  --txt:#ffffff; --sub:#b3b3b3; --green:#1ed760; --green-dark:#17a44a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#000;color:var(--txt);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:var(--green)}
+button{font-family:inherit;cursor:pointer}
+
+/* ---------- COVER ---------- */
+#cover{
+  position:fixed;inset:0;z-index:50;overflow-y:auto;
+  background:linear-gradient(180deg,#1d3a24 0%,#121212 55%);
+  display:flex;justify-content:center;
+  transition:transform .7s ease,opacity .7s ease;
+}
+#cover.opening{transform:translateY(-100%);opacity:.4;pointer-events:none}
+.cover-inner{width:100%;max-width:480px;padding:28px 24px 48px;text-align:center}
+.cover-brand{font-family:'Montserrat',sans-serif;font-weight:900;letter-spacing:2px;font-size:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.cover-art{width:min(78vw,340px);aspect-ratio:1;margin:28px auto 20px;border-radius:8px;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.cover-label{color:var(--sub);font-size:11px;letter-spacing:2.5px;font-weight:600}
+.cover-title{font-family:'Montserrat',sans-serif;font-weight:900;font-size:34px;line-height:1.15;margin:10px 0 6px}
+.cover-artist{color:var(--sub);font-size:14px;font-weight:500}
+.cover-guest{margin:22px auto 0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:12px 16px;max-width:320px}
+.cg-label{font-size:11px;color:var(--sub);letter-spacing:1.5px;text-transform:uppercase}
+.cg-name{font-weight:700;font-size:17px;margin-top:2px}
+.play-big{
+  width:72px;height:72px;border-radius:50%;border:none;margin-top:26px;
+  background:var(--green);color:#000;font-size:26px;
+  display:inline-flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 30px rgba(30,215,96,.35);
+  transition:transform .15s ease,background .15s ease;
+}
+.play-big:hover{transform:scale(1.06);background:#3be477}
+.play-triangle{margin-left:4px}
+.cover-cta{margin-top:10px;font-weight:700;font-size:15px}
+.cover-meta{margin-top:14px;color:var(--sub);font-size:12.5px}
+
+/* ---------- APP SHELL ---------- */
+#app{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative;box-shadow:0 0 60px rgba(0,0,0,.8)}
+.topbar{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;background:rgba(18,18,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+}
+.brand{font-family:'Montserrat',sans-serif;font-weight:900;letter-spacing:1.5px;font-size:17px;display:flex;align-items:center;gap:7px}
+.brand.small{font-size:14px;justify-content:center}
+.logo-dot{background:var(--green);color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:10px}
+.top-guest{color:var(--sub);font-size:12.5px;font-weight:600;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{padding:18px 16px 120px}
+
+/* ---------- NOW PLAYING ---------- */
+.now-playing{display:flex;gap:14px;align-items:center;padding:6px 2px 18px}
+.np-art{width:92px;height:92px;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.np-label{color:var(--green);font-size:11px;font-weight:700;letter-spacing:2px}
+.np-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:19px;line-height:1.25;margin:3px 0 2px}
+.np-artist{font-weight:600;font-size:14px}
+.np-meta{color:var(--sub);font-size:12.5px;margin-top:3px}
+
+/* ---------- CARDS ---------- */
+.card{background:var(--panel);border-radius:14px;padding:18px;margin-bottom:16px}
+.card-label{color:var(--sub);font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:12px}
+.card-label.light{color:rgba(255,255,255,.85)}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}
+.section-head h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px}
+.section-sub{color:var(--sub);font-size:12px;text-align:right}
+
+/* countdown */
+.countdown{display:flex;gap:8px}
+.cd-cell{flex:1;background:var(--panel2);border-radius:10px;padding:12px 4px;text-align:center}
+.cd-num{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;color:var(--green)}
+.cd-lab{color:var(--sub);font-size:11px;margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+.cd-date{color:var(--sub);font-size:12.5px;text-align:center;margin-top:12px}
+
+/* tracklist */
+.track{display:flex;align-items:center;gap:12px;padding:11px 8px;border-radius:10px}
+.track:hover{background:var(--panel2)}
+.track-num{color:var(--sub);font-weight:600;width:18px;text-align:center}
+.track-main{flex:1;min-width:0}
+.track-title{font-weight:600;font-size:15.5px}
+.track-meta{color:var(--sub);font-size:12.5px;margin-top:1px}
+.track-dur{color:var(--sub);font-size:13px;font-variant-numeric:tabular-nums}
+.venue{border-top:1px solid var(--line);margin-top:10px;padding-top:14px}
+.venue-name{font-weight:700;font-size:15px}
+.venue-addr{color:var(--sub);font-size:13px;margin-top:2px;line-height:1.5}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600}
+.btn-row{display:flex;gap:10px}
+.btn-row.wrap{flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border-radius:999px;padding:10px 18px;font-weight:700;font-size:13.5px;
+  text-decoration:none;border:1px solid transparent;transition:transform .12s ease,background .12s ease;
+}
+.btn:hover{transform:scale(1.03)}
+.btn-green{background:var(--green);color:#000}
+.btn-green:hover{background:#3be477}
+.btn-ghost{background:transparent;color:var(--txt);border-color:#4d4d4d}
+.btn-ghost:hover{border-color:#fff}
+.btn-block{width:100%}
+
+/* artists */
+.artist{display:flex;align-items:center;gap:12px;padding:10px 4px}
+.artist + .artist{border-top:1px solid var(--line)}
+.artist-ava{width:56px;height:56px;border-radius:50%;object-fit:cover}
+.artist-main{flex:1;min-width:0}
+.artist-name{font-weight:700;font-size:15.5px}
+.verified{color:var(--green);font-size:11px;font-weight:600}
+.artist-sub{color:var(--sub);font-size:12.5px;margin-top:1px;line-height:1.45}
+.follow-btn{background:transparent;color:var(--txt);border:1px solid #4d4d4d;border-radius:999px;padding:7px 16px;font-weight:700;font-size:12.5px}
+.follow-btn.following{background:var(--green);border-color:var(--green);color:#000}
+
+/* wrapped */
+.wrapped-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wstat{background:var(--panel2);border-radius:12px;padding:16px 14px}
+.wstat-green{background:linear-gradient(135deg,#1ed760,#0f7a34);color:#000}
+.wstat-green .w-lab{color:rgba(0,0,0,.75)}
+.w-num{font-family:'Montserrat',sans-serif;font-weight:900;font-size:21px;line-height:1.15}
+.w-lab{color:var(--sub);font-size:12px;margin-top:4px;line-height:1.4}
+
+/* lyrics */
+.lyrics{background:linear-gradient(160deg,#1f9d4d,#146c33)}
+.lyrics-text{font-family:'Montserrat',sans-serif;font-weight:700;font-size:17px;line-height:1.55}
+.lyrics-src{margin-top:12px;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.85)}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gallery img{border-radius:8px;aspect-ratio:1;object-fit:cover;width:100%}
+
+/* gift */
+.gift{background:var(--panel2);border-radius:12px;padding:16px;margin-bottom:10px}
+.gift:last-child{margin-bottom:0}
+.gift-name{font-weight:800;font-family:'Montserrat',sans-serif}
+.gift-num{font-size:18px;letter-spacing:1.5px;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.gift-owner{color:var(--sub);font-size:12.5px;margin-bottom:12px}
+
+/* form + wishes */
+.f-lab{display:block;font-size:12.5px;font-weight:600;color:var(--sub);margin-bottom:12px}
+.f-in{
+  width:100%;margin-top:6px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+  color:var(--txt);padding:11px 12px;font-size:14px;font-family:inherit;
+}
+.f-in:focus{outline:2px solid var(--green);border-color:transparent}
+textarea.f-in{resize:vertical}
+.wish-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.wish{background:var(--panel2);border-radius:12px;padding:12px 14px}
+.wish-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.wish-name{font-weight:700;font-size:14px}
+.wish-badge{font-size:11px;font-weight:700;color:#000;background:var(--green);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.wish-badge.absent{background:#4d4d4d;color:#fff}
+.wish-msg{color:#e6e6e6;font-size:13.5px;line-height:1.55;margin-top:5px;white-space:pre-wrap;word-break:break-word}
+.wish-time{color:var(--sub);font-size:11.5px;margin-top:6px}
+.wish-empty{color:var(--sub);font-size:13px;margin-top:14px;text-align:center}
+.wish-empty.off{display:none}
+
+/* footer */
+.footer{text-align:center;color:var(--sub);font-size:12.5px;line-height:1.7;padding:10px 8px 0}
+.footer .brand{margin-bottom:8px;color:var(--txt)}
+
+/* ---------- PLAYER BAR ---------- */
+.player{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:10px;z-index:30;
+  width:min(480px,calc(100vw - 16px));
+  background:#282828;border-radius:10px;padding:8px 12px;
+  display:flex;align-items:center;gap:10px;box-shadow:0 12px 32px rgba(0,0,0,.6);
+}
+.player-art{width:44px;height:44px;border-radius:5px}
+.player-main{flex:1;min-width:0}
+.player-title{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-artist{color:var(--sub);font-size:11.5px}
+.player-progress{height:3px;background:#4d4d4d;border-radius:2px;margin-top:6px;overflow:hidden}
+.player-bar{height:100%;width:0%;background:var(--green)}
+.player-time{color:var(--sub);font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.like-btn{background:none;border:none;color:#fff;font-size:20px;line-height:1;padding:4px}
+.like-btn.liked{color:var(--green)}
+.play-btn{
+  width:40px;height:40px;border-radius:50%;border:none;background:#fff;color:#000;
+  font-size:15px;display:inline-flex;align-items:center;justify-content:center;flex:none;
+}
+@media (max-width:360px){ .player-time{display:none} .cover-title{font-size:29px} }

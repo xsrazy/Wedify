@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wedify.xsrazy.web.id/sitemap.xml
