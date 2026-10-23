@@ -110,7 +110,8 @@ main{padding:18px 16px 120px}
 .artist-ava{width:56px;height:56px;border-radius:50%;object-fit:cover}
 .artist-main{flex:1;min-width:0}
 .artist-name{font-weight:700;font-size:15.5px}
-.verified{color:var(--green);font-size:11px;font-weight:600}
+.verified{color:#e8e8e8;font-size:11px;font-weight:600;white-space:nowrap}
+.verified-badge{width:14px;height:14px;vertical-align:-2.5px;margin-right:4px}
 .artist-sub{color:var(--sub);font-size:12.5px;margin-top:1px;line-height:1.45}
 .follow-btn{background:transparent;color:var(--txt);border:1px solid #4d4d4d;border-radius:999px;padding:7px 16px;font-weight:700;font-size:12.5px}
 .follow-btn.following{background:var(--green);border-color:var(--green);color:#000}
@@ -183,3 +184,6 @@ textarea.f-in{resize:vertical}
   font-size:15px;display:inline-flex;align-items:center;justify-content:center;flex:none;
 }
 @media (max-width:360px){ .player-time{display:none} .cover-title{font-size:29px} }
+
+.artist-fans { font-size: .78rem; color: #b3b3b3; margin-top: 2px; }
+.follow-btn:disabled { opacity: .6; }
