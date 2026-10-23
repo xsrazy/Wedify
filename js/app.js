@@ -55,6 +55,7 @@ if (guest) {
 // ---- Audio / player ----
 const audio = $("#audio");
 const playBtn = $("#playBtn");
+const heroPlay = $("#heroPlay");
 const playerBar = $("#playerBar");
 const curTime = $("#curTime");
 const durTime = $("#durTime");
@@ -66,14 +67,25 @@ function fmt(sec) {
   return m + ":" + String(s).padStart(2, "0");
 }
 function setPlayIcon() {
-  playBtn.textContent = audio.paused ? "▶" : "❚❚";
+  const glyph = audio.paused ? "▶" : "❚❚";
+  playBtn.textContent = glyph;
+  if (heroPlay) heroPlay.textContent = glyph;
+  const t1 = $("#track1Row");
+  if (t1) t1.classList.toggle("eq", !audio.paused);
 }
 playBtn.addEventListener("click", () => {
   if (audio.paused) audio.play(); else audio.pause();
 });
+if (heroPlay) {
+  heroPlay.addEventListener("click", () => {
+    if (audio.paused) audio.play(); else audio.pause();
+  });
+}
 audio.addEventListener("play", setPlayIcon);
 audio.addEventListener("pause", setPlayIcon);
 audio.addEventListener("loadedmetadata", () => { durTime.textContent = fmt(audio.duration); });
+audio.addEventListener("durationchange", () => { durTime.textContent = fmt(audio.duration); });
+if (audio.readyState >= 1 && isFinite(audio.duration) && audio.duration > 0) durTime.textContent = fmt(audio.duration);
 audio.addEventListener("timeupdate", () => {
   curTime.textContent = fmt(audio.currentTime);
   if (audio.duration) playerBar.style.width = (audio.currentTime / audio.duration * 100) + "%";
@@ -113,6 +125,7 @@ tickCountdown();
 setInterval(tickCountdown, 1000);
 
 // ---- Follow artis (beneran, kesimpen di backend) ----
+let currentArtist = "groom";
 function renderFollows() {
   $$(".follow-btn").forEach((btn) => {
     const artist = btn.dataset.artist;
@@ -123,6 +136,10 @@ function renderFollows() {
     const fans = document.getElementById(artist === "groom" ? "fansGroom" : "fansBride");
     if (fans) fans.textContent = followCounts[artist].toLocaleString("id-ID") + " penggemar";
   });
+  const avFans = $("#avFans");
+  if (avFans && currentArtist) {
+    avFans.textContent = followCounts[currentArtist].toLocaleString("id-ID") + " penggemar";
+  }
 }
 $$(".follow-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
@@ -149,6 +166,47 @@ $$(".follow-btn").forEach((btn) => {
     btn.disabled = false;
   });
 });
+
+// ---- Halaman artis (view kedua, ala profil artis) ----
+function fillArtistView(artist) {
+  currentArtist = artist;
+  const isGroom = artist === "groom";
+  const name = isGroom ? (SITE.groom_name || SITE.groom_short) : (SITE.bride_name || SITE.bride_short);
+  const photo = isGroom ? SITE.groom_photo : SITE.bride_photo;
+  const parents = isGroom ? SITE.groom_parents : SITE.bride_parents;
+  const listeners = isGroom ? SITE.groom_listeners : SITE.bride_listeners;
+  const role = isGroom ? "Putra" : "Putri";
+  const duo = SITE.groom_short + " & " + SITE.bride_short;
+  setText("#avName", name);
+  const ph = $("#avPhoto"); if (ph) ph.src = photo;
+  setText("#avSub", role + " dari " + parents + " • " + listeners + " pendengar bulanan");
+  setText("#avAbout", role + " dari " + parents + " • " + listeners + " pendengar bulanan. Separuh dari duo " + duo + ", bintang utama album pernikahan ini.");
+  const fb = $("#avFollow"); if (fb) fb.dataset.artist = artist;
+  setText("#avTrack1Title", SITE.akad_desc);
+  setText("#avTrack1Meta", SITE.date_label + " • " + SITE.akad_time + " • " + SITE.venue_name);
+  setText("#avTrack2Title", SITE.resepsi_desc);
+  setText("#avTrack2Meta", SITE.date_label + " • " + SITE.resepsi_time + " • " + SITE.venue_name);
+  const d1 = $(".av-dur-1"); if (d1) d1.textContent = durLabel(SITE.akad_time);
+  const d2 = $(".av-dur-2"); if (d2) d2.textContent = durLabel(SITE.resepsi_time);
+  renderFollows();
+}
+function openArtist(artist) {
+  if (artist !== "groom" && artist !== "bride") return;
+  fillArtistView(artist);
+  $("#albumView").hidden = true;
+  $("#artistView").hidden = false;
+  window.scrollTo(0, 0);
+}
+function closeArtist() {
+  $("#artistView").hidden = true;
+  $("#albumView").hidden = false;
+  window.scrollTo(0, 0);
+}
+$$(".artist-open").forEach((el) => {
+  el.addEventListener("click", () => openArtist(el.dataset.artist));
+});
+const avBackBtn = $("#avBack");
+if (avBackBtn) avBackBtn.addEventListener("click", closeArtist);
 
 // ---- Tombol salin ----
 function copyText(text, btn) {
@@ -311,7 +369,20 @@ $("#wishList").addEventListener("click", async (e) => {
   if (delBtn) {
     const uuid = delBtn.dataset.del;
     const ownMap = store.get(OWN_KEY);
-    if (!ownMap[uuid] || !confirm("Hapus ucapan ini?")) return;
+    if (!ownMap[uuid]) return;
+    if (!delBtn.dataset.armed) {
+      delBtn.dataset.armed = "1";
+      delBtn.textContent = "Yakin hapus?";
+      delBtn.classList.add("armed");
+      setTimeout(() => {
+        if (delBtn.isConnected) {
+          delete delBtn.dataset.armed;
+          delBtn.textContent = "Hapus";
+          delBtn.classList.remove("armed");
+        }
+      }, 3500);
+      return;
+    }
     try {
       const res = await fetch("/api/comment/" + encodeURIComponent(ownMap[uuid]), {
         method: "DELETE", headers: { "x-access-key": ACCESS_KEY },
@@ -424,6 +495,11 @@ function applySite() {
   setText("#coverLabel", "WEDIFY ORIGINAL SOUNDTRACK • " + year);
   const ct = $("#coverTitle");
   if (ct) ct.innerHTML = esc(SITE.album_title || duo) + ":<br>" + esc(String(SITE.album_subtitle || "").split("•")[0].trim());
+  const ht = $("#heroTitle");
+  if (ht) ht.innerHTML = esc(SITE.album_title || duo) + ":<br>" + esc(String(SITE.album_subtitle || "").split("•")[0].trim());
+  const hga = $("#heroGroomAva"); if (hga) hga.src = SITE.groom_photo;
+  const hba = $("#heroBrideAva"); if (hba) hba.src = SITE.bride_photo;
+  const hd = $(".hero-duo"); if (hd) hd.textContent = duo;
   setText("#coverArtist", "Album • " + duo);
   setText("#coverMeta", SITE.wrapped_match + " match • 2 tracks • 1 hari spesial");
   $$('img[data-album-art]').forEach((img) => { img.src = SITE.album_art; });
@@ -431,7 +507,7 @@ function applySite() {
   setText("#npTitle", SITE.music_title);
   setText("#playerTitle", SITE.music_title);
   setText("#playerArtist", SITE.music_artist || duo);
-  setText("#npMetaText", SITE.wrapped_match + " match • " + year + " • Single • Untuk: ");
+  setText("#npMetaText", SITE.wrapped_match + " match • " + year + " • Album • 2 tracks • Untuk: ");
   setText("#cdDate", SITE.date_label + " • " + SITE.venue_name);
   setText("#track1Title", SITE.akad_desc);
   setText("#track1Meta", SITE.date_label + " • " + SITE.akad_time + " • " + SITE.venue_name);
@@ -468,6 +544,10 @@ function applySite() {
     const urls = String(SITE.gallery_urls || "").split("\n").map((u) => u.trim()).filter(Boolean);
     if (urls.length) {
       gal.innerHTML = urls.map((u, i) => '<img src="' + esc(u) + '" alt="Galeri ' + (i + 1) + '" loading="lazy">').join("");
+      const avGal = $("#avGallery");
+      if (avGal) {
+        avGal.innerHTML = urls.map((u, i) => '<figure class="av-tile"><img src="' + esc(u) + '" alt="Galeri ' + (i + 1) + '" loading="lazy"><figcaption>Galeri ' + (i + 1) + "</figcaption></figure>").join("");
+      }
     }
   }
   setText("#gift1Name", SITE.gift1_bank);
@@ -483,6 +563,7 @@ function applySite() {
   }
   targetMs = new Date(SITE.wedding_iso).getTime();
   tickCountdown();
+  fillArtistView(currentArtist);
   buildShare();
 }
 

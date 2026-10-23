@@ -20,13 +20,14 @@ The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Ga
 ## Features
 
 - Album cover gate with guest personalization via `?to=Guest Name` (the cover shows a "Made for you" box and pre-fills the RSVP name)
+- Album hero: a gradient album header with a big cover, the couple's avatar duo line, and a large round play button that mirrors the player state
 - Real music player: fixed bottom player bar with play/pause, live progress bar, track times, and a like button; the cover Play button starts the music
 - Real Follow buttons: one follow per visitor per artist, stored in the database; clicking again unfollows and the count goes down, on the page and in the dashboard
 - Live countdown to the wedding day (days, hours, minutes, seconds)
 - Tracklist schedule: Akad (track 1) and Resepsi (track 2) with venue address, dress code chips, a Google Maps button, and a Save The Date button (Google Calendar)
-- "About the Artists" couple profiles with follower counts
-- Wedify Wrapped: playful stat cards (match percentage, days to the main stage, top genre, best collaboration)
-- Lyrics card with a Quranic verse (QS. Ar-Rum 21)
+- Dedicated artist pages: clicking a partner opens a full artist view with a photo banner, a Verified Artist badge, monthly listeners, a working Follow button with a live fan count, a "Popular" list of the two event tracks, a Discography grid from the gallery, and an About block
+- Wedify Wrapped: tall, colorful story cards in a horizontal snap-scroll row (match percentage, days to the main stage, top genre, best collaboration)
+- Full-bleed lyrics section with a Quranic verse (QS. Ar-Rum 21)
 - Photo gallery fed from the dashboard settings
 - Love Gift as "Exclusive Merch": bank/e-wallet cards with masked numbers and copy-to-clipboard buttons
 - RSVP + guestbook stored server-side, with attendance badges

@@ -64,14 +64,26 @@
   </header>
 
   <main>
-    <!-- NOW PLAYING -->
-    <section class="now-playing">
-      <img class="np-art" data-album-art src="/assets/images/album.webp" alt="Cover album Usra & Zee">
-      <div class="np-info">
-        <div class="np-label">NOW PLAYING</div>
-        <h2 class="np-title" id="npTitle">River Flows in You</h2>
-        <div class="np-artist" id="npArtist">Usra &amp; Zee</div>
-        <div class="np-meta"><span id="npMetaText">100% match • 2050 • Single • Untuk: </span><span id="npGuest">kamu</span></div>
+   <div id="albumView">
+    <!-- ALBUM HERO -->
+    <section class="hero">
+      <img class="hero-bg" data-album-art src="/assets/images/album.webp" alt="" aria-hidden="true">
+      <div class="hero-inner">
+        <img class="hero-art" data-album-art src="/assets/images/album.webp" alt="Cover album Usra & Zee">
+        <div class="hero-info">
+          <div class="hero-label">Album</div>
+          <h1 class="hero-title" id="heroTitle">USRA &amp; ZEE:<br>The Wedding Album</h1>
+          <div class="hero-artist">
+            <img class="hero-ava" id="heroGroomAva" src="/assets/images/cowo.webp" alt="">
+            <img class="hero-ava" id="heroBrideAva" src="/assets/images/cewe.webp" alt="">
+            <span class="hero-duo">Usra &amp; Zee</span>
+          </div>
+          <div class="hero-meta"><span id="npMetaText">100% match • 2050 • Album • 2 tracks • Untuk: </span><span id="npGuest">kamu</span></div>
+          <div class="hero-music">Musik: <span id="npArtist">Usra &amp; Zee</span></div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button id="heroPlay" class="hero-play" type="button" aria-label="Putar atau jeda musik">▶</button>
       </div>
     </section>
 
@@ -93,15 +105,15 @@
         <h3>Tracklist Acara</h3>
         <span class="section-sub">2 tracks • putar sampai selesai</span>
       </div>
-      <div class="track">
-        <div class="track-num">1</div>
+      <div class="track" id="track1Row">
+        <div class="track-num">1<span class="eq-bars" aria-hidden="true"><i></i><i></i><i></i></span></div>
         <div class="track-main">
           <div class="track-title" id="track1Title">Akad Nikah</div>
           <div class="track-meta" id="track1Meta">Senin, 17 Januari 2050 • 10.00 WIB • Jam Gadang</div>
         </div>
         <div class="track-dur" id="track1Dur">10:00</div>
       </div>
-      <div class="track">
+      <div class="track" id="track2Row">
         <div class="track-num">2</div>
         <div class="track-main">
           <div class="track-title" id="track2Title">Resepsi</div>
@@ -127,18 +139,18 @@
     <section class="card">
       <div class="section-head"><h3>Tentang Artis</h3><span class="section-sub">duo paling ditunggu 2050</span></div>
       <div class="artist">
-        <img class="artist-ava" id="groomAva" src="/assets/images/cowo.webp" alt="Usra">
+        <img class="artist-ava artist-open" id="groomAva" data-artist="groom" src="/assets/images/cowo.webp" alt="Usra">
         <div class="artist-main">
-          <div class="artist-name" id="groomName">Rahmatul Usra <span class="verified"><svg class="verified-badge" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.00 12.00 L21.32 13.23 L22.63 14.85 L20.68 15.60 L21.53 17.50 L19.46 17.72 L19.78 19.78 L17.72 19.46 L17.50 21.53 L15.60 20.68 L14.85 22.63 L13.23 21.32 L12.00 23.00 L10.77 21.32 L9.15 22.63 L8.40 20.68 L6.50 21.53 L6.28 19.46 L4.22 19.78 L4.54 17.72 L2.47 17.50 L3.32 15.60 L1.37 14.85 L2.68 13.23 L1.00 12.00 L2.68 10.77 L1.37 9.15 L3.32 8.40 L2.47 6.50 L4.54 6.28 L4.22 4.22 L6.28 4.54 L6.50 2.47 L8.40 3.32 L9.15 1.37 L10.77 2.68 L12.00 1.00 L13.23 2.68 L14.85 1.37 L15.60 3.32 L17.50 2.47 L17.72 4.54 L19.78 4.22 L19.46 6.28 L21.53 6.50 L20.68 8.40 L22.63 9.15 L21.32 10.77 Z" fill="#ffffff"/><path d="M8.1 12.5l2.5 2.5 5.3-5.9" fill="none" stroke="#121212" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified Artist</span></div>
+          <div class="artist-name artist-open" id="groomName" data-artist="groom">Rahmatul Usra <span class="verified"><svg class="verified-badge" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.00 12.00 L21.32 13.23 L22.63 14.85 L20.68 15.60 L21.53 17.50 L19.46 17.72 L19.78 19.78 L17.72 19.46 L17.50 21.53 L15.60 20.68 L14.85 22.63 L13.23 21.32 L12.00 23.00 L10.77 21.32 L9.15 22.63 L8.40 20.68 L6.50 21.53 L6.28 19.46 L4.22 19.78 L4.54 17.72 L2.47 17.50 L3.32 15.60 L1.37 14.85 L2.68 13.23 L1.00 12.00 L2.68 10.77 L1.37 9.15 L3.32 8.40 L2.47 6.50 L4.54 6.28 L4.22 4.22 L6.28 4.54 L6.50 2.47 L8.40 3.32 L9.15 1.37 L10.77 2.68 L12.00 1.00 L13.23 2.68 L14.85 1.37 L15.60 3.32 L17.50 2.47 L17.72 4.54 L19.78 4.22 L19.46 6.28 L21.53 6.50 L20.68 8.40 L22.63 9.15 L21.32 10.77 Z" fill="#ffffff"/><path d="M8.1 12.5l2.5 2.5 5.3-5.9" fill="none" stroke="#121212" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified Artist</span></div>
           <div class="artist-sub" id="groomSub">Putra dari Bapak ... &amp; Ibu ... • 1.205 pendengar bulanan</div>
           <div class="artist-fans" id="fansGroom"></div>
         </div>
         <button class="follow-btn" type="button" data-artist="groom">Follow</button>
       </div>
       <div class="artist">
-        <img class="artist-ava" id="brideAva" src="/assets/images/cewe.webp" alt="Zee">
+        <img class="artist-ava artist-open" id="brideAva" data-artist="bride" src="/assets/images/cewe.webp" alt="Zee">
         <div class="artist-main">
-          <div class="artist-name" id="brideName">Azizi Asadel <span class="verified"><svg class="verified-badge" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.00 12.00 L21.32 13.23 L22.63 14.85 L20.68 15.60 L21.53 17.50 L19.46 17.72 L19.78 19.78 L17.72 19.46 L17.50 21.53 L15.60 20.68 L14.85 22.63 L13.23 21.32 L12.00 23.00 L10.77 21.32 L9.15 22.63 L8.40 20.68 L6.50 21.53 L6.28 19.46 L4.22 19.78 L4.54 17.72 L2.47 17.50 L3.32 15.60 L1.37 14.85 L2.68 13.23 L1.00 12.00 L2.68 10.77 L1.37 9.15 L3.32 8.40 L2.47 6.50 L4.54 6.28 L4.22 4.22 L6.28 4.54 L6.50 2.47 L8.40 3.32 L9.15 1.37 L10.77 2.68 L12.00 1.00 L13.23 2.68 L14.85 1.37 L15.60 3.32 L17.50 2.47 L17.72 4.54 L19.78 4.22 L19.46 6.28 L21.53 6.50 L20.68 8.40 L22.63 9.15 L21.32 10.77 Z" fill="#ffffff"/><path d="M8.1 12.5l2.5 2.5 5.3-5.9" fill="none" stroke="#121212" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified Artist</span></div>
+          <div class="artist-name artist-open" id="brideName" data-artist="bride">Azizi Asadel <span class="verified"><svg class="verified-badge" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.00 12.00 L21.32 13.23 L22.63 14.85 L20.68 15.60 L21.53 17.50 L19.46 17.72 L19.78 19.78 L17.72 19.46 L17.50 21.53 L15.60 20.68 L14.85 22.63 L13.23 21.32 L12.00 23.00 L10.77 21.32 L9.15 22.63 L8.40 20.68 L6.50 21.53 L6.28 19.46 L4.22 19.78 L4.54 17.72 L2.47 17.50 L3.32 15.60 L1.37 14.85 L2.68 13.23 L1.00 12.00 L2.68 10.77 L1.37 9.15 L3.32 8.40 L2.47 6.50 L4.54 6.28 L4.22 4.22 L6.28 4.54 L6.50 2.47 L8.40 3.32 L9.15 1.37 L10.77 2.68 L12.00 1.00 L13.23 2.68 L14.85 1.37 L15.60 3.32 L17.50 2.47 L17.72 4.54 L19.78 4.22 L19.46 6.28 L21.53 6.50 L20.68 8.40 L22.63 9.15 L21.32 10.77 Z" fill="#ffffff"/><path d="M8.1 12.5l2.5 2.5 5.3-5.9" fill="none" stroke="#121212" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified Artist</span></div>
           <div class="artist-sub" id="brideSub">Putri dari Bapak ... &amp; Ibu ... • 1.748 pendengar bulanan</div>
           <div class="artist-fans" id="fansBride"></div>
         </div>
@@ -161,7 +173,7 @@
 
     <!-- LYRICS / DOA -->
     <section class="card lyrics">
-      <div class="card-label light">LIRIK • AYAT SUCI</div>
+      <div class="card-label light">Lirik</div>
       <p class="lyrics-text" id="lyricsText">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."</p>
       <div class="lyrics-src" id="lyricsSrc">QS. Ar-Rum ayat 21</div>
     </section>
@@ -237,14 +249,61 @@
       Terinspirasi dari tampilan aplikasi streaming musik; bukan afiliasi Spotify.<br>
       Build with ❤ Usra • <a href="https://github.com/xsrazy/Wedify" target="_blank" rel="noopener">github.com/xsrazy/Wedify</a></p>
     </footer>
+   </div><!-- /#albumView -->
+
+    <!-- ARTIST VIEW -->
+    <section id="artistView" hidden>
+      <button id="avBack" class="av-back" type="button">← Kembali</button>
+      <div class="av-head">
+        <img class="av-photo" id="avPhoto" src="/assets/images/cowo.webp" alt="Foto artis">
+        <div class="verified av-verified"><svg class="verified-badge av-badge" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.00 12.00 L21.32 13.23 L22.63 14.85 L20.68 15.60 L21.53 17.50 L19.46 17.72 L19.78 19.78 L17.72 19.46 L17.50 21.53 L15.60 20.68 L14.85 22.63 L13.23 21.32 L12.00 23.00 L10.77 21.32 L9.15 22.63 L8.40 20.68 L6.50 21.53 L6.28 19.46 L4.22 19.78 L4.54 17.72 L2.47 17.50 L3.32 15.60 L1.37 14.85 L2.68 13.23 L1.00 12.00 L2.68 10.77 L1.37 9.15 L3.32 8.40 L2.47 6.50 L4.54 6.28 L4.22 4.22 L6.28 4.54 L6.50 2.47 L8.40 3.32 L9.15 1.37 L10.77 2.68 L12.00 1.00 L13.23 2.68 L14.85 1.37 L15.60 3.32 L17.50 2.47 L17.72 4.54 L19.78 4.22 L19.46 6.28 L21.53 6.50 L20.68 8.40 L22.63 9.15 L21.32 10.77 Z" fill="#ffffff"/><path d="M8.1 12.5l2.5 2.5 5.3-5.9" fill="none" stroke="#121212" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified Artist</div>
+        <h1 class="av-name" id="avName">Rahmatul Usra</h1>
+        <div class="av-sub" id="avSub">Putra dari Bapak ... &amp; Ibu ... • 1.205 pendengar bulanan</div>
+        <div class="av-actions">
+          <button class="follow-btn" type="button" id="avFollow" data-artist="groom">Follow</button>
+          <span class="artist-fans" id="avFans"></span>
+        </div>
+      </div>
+
+      <section class="card">
+        <div class="section-head"><h3>Popular</h3></div>
+        <div class="track">
+          <div class="track-num">1</div>
+          <div class="track-main">
+            <div class="track-title" id="avTrack1Title">Akad Nikah</div>
+            <div class="track-meta" id="avTrack1Meta">Senin, 17 Januari 2050 • 10.00 WIB • Jam Gadang</div>
+          </div>
+          <div class="track-dur av-dur-1">10:00</div>
+        </div>
+        <div class="track">
+          <div class="track-num">2</div>
+          <div class="track-main">
+            <div class="track-title" id="avTrack2Title">Resepsi</div>
+            <div class="track-meta" id="avTrack2Meta">Senin, 17 Januari 2050 • 13.00 WIB • Jam Gadang</div>
+          </div>
+          <div class="track-dur av-dur-2">13:00</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head"><h3>Discography</h3><span class="section-sub">galeri sang artis</span></div>
+        <div class="av-discog" id="avGallery"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-head"><h3>Tentang Artis</h3></div>
+        <p class="av-about" id="avAbout">Putra dari Bapak ... &amp; Ibu ... • 1.205 pendengar bulanan</p>
+      </section>
+    </section>
   </main>
 
   <!-- PLAYER BAR -->
   <div class="player">
     <img class="player-art" data-album-art src="/assets/images/album.webp" alt="">
     <div class="player-main">
-      <div class="player-title" id="playerTitle">River Flows in You</div>
+      <div class="player-title" id="npTitle">River Flows in You</div>
       <div class="player-artist" id="playerArtist">Usra &amp; Zee</div>
+      <span id="playerTitle" class="sr-only" aria-hidden="true">River Flows in You</span>
       <div class="player-progress"><div class="player-bar" id="playerBar"></div></div>
     </div>
     <div class="player-time"><span id="curTime">0:00</span>/<span id="durTime">0:00</span></div>
