@@ -70,7 +70,28 @@ The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Ga
 
 ## Customization
 
-Almost everything is edited from the dashboard (Konten Web tab): couple names and parents, album artwork and photos (URLs or paths), soundtrack file, wedding date and countdown target, schedule, venue, maps link, calendar times, dress code, the verse, Wrapped texts, gift accounts, gallery images (one URL per line), and the share text. Code changes are only needed for layout or entirely new sections; the fallback demo content lives at the top of `js/app.js` and the database seed defaults in `api/_lib.js`.
+Almost everything is edited from the dashboard (Konten Web tab): couple names and parents, album artwork and photos (uploaded files or URLs), soundtrack file, wedding date and countdown target, schedule, venue, maps link, calendar times, dress code, the verse, Wrapped texts, gift accounts, gallery images (one URL per line), and the share text. Code changes are only needed for layout or entirely new sections; the fallback demo content lives at the top of `js/app.js` and the database seed defaults in `api/_lib.js`.
+
+## Media guide
+
+Sizes and limits for everything editable in the Konten Web tab. The same fields also accept a pasted URL or path instead of an upload.
+
+| Slot | Where it appears | Recommended size | Formats |
+| --- | --- | --- | --- |
+| Album cover | Square cover on the opening screen (displayed up to 340 px wide) and as the player thumbnail | 1000x1000, square 1:1 (minimum 640x640) | JPG, PNG, WebP, GIF |
+| Groom photo, Bride photo | Round artist avatar (56 px) next to each artist row | 600x600, square 1:1 | JPG, PNG, WebP, GIF |
+| Gallery photos | 3-column grid, every cell cropped to a square | At least 900 px on the shortest side | JPG, PNG, WebP, GIF |
+| Soundtrack | Audio player | Up to 3 MB per upload | MP3, OGG, M4A, AAC |
+
+Notes:
+
+- The album cover and the artist photos are cropped to their shapes with `object-fit: cover`; keep faces and subjects near the center of the frame.
+- Gallery cells are square-cropped, so any orientation works, but the center of the photo is what survives the crop.
+- At 128 kbps, about 3 minutes of audio fits in the 3 MB upload limit; a short loop is ideal. Bigger files can be hosted elsewhere and pasted as a URL instead, with no size limit.
+- Uploaded images are resized in the browser before upload (longest side capped at 1600 px) and re-encoded to WebP at 85% quality, so a large phone photo becomes a small file automatically. Animated GIFs are re-encoded as stills by this process; paste a GIF URL instead if the animation matters.
+- Uploaded files are stored in the project's own Blob storage and served from `/api/media/...` links. Replacing a photo or song uploads a new file and points the field at it.
+- The social preview image is not dashboard-editable: replace `assets/images/og-image.jpg` with your own 1200x630 JPG to rebrand link previews.
+- Every text field in the dashboard accepts up to 6000 characters.
 
 ## Notes
 

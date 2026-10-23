@@ -1,7 +1,46 @@
-@import url("common.css");
+/* Wedify dashboard theme: Spotify-style dark, matching the public site.
+   The dashboard is locked to dark (body data-theme="dark"); Bootstrap's
+   own dark variables do the component work and this sheet supplies the
+   Wedify palette: near-black surfaces, #1DB954 green, pill buttons. */
+
+:root {
+    color-scheme: dark;
+    --wedify-green: #1db954;
+    --wedify-green-hover: #1ed760;
+    --wedify-bg: #121212;
+    --wedify-card: #181818;
+    --wedify-elevated: #232323;
+    --wedify-input: #242424;
+    --wedify-border: #2a2a2a;
+    --wedify-muted: #b3b3b3;
+}
+
+[data-bs-theme="dark"] {
+    --bs-body-bg: var(--wedify-bg);
+    --bs-body-color: #ffffff;
+    --bs-border-color: var(--wedify-border);
+    --bs-secondary-color: var(--wedify-muted);
+    --bs-tertiary-bg: var(--wedify-elevated);
+    --bs-card-bg: var(--wedify-card);
+    --bs-modal-bg: var(--wedify-card);
+    --bs-dropdown-bg: var(--wedify-elevated);
+    --bs-list-group-bg: transparent;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, #1d1d1d 0, var(--wedify-bg) 220px) var(--wedify-bg);
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+::selection {
+    background: var(--wedify-green);
+    color: #000000;
+}
 
 ::-webkit-scrollbar {
-    width: 1rem;
+    width: 0.75rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -9,64 +48,272 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(192, 192, 192, 0.8);
+    background-color: #4d4d4d;
     border-radius: 1rem;
-    border: 0.25rem solid transparent;
+    border: 0.2rem solid transparent;
     background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(192, 192, 192, 1);
+    background-color: #6a6a6a;
 }
 
-@media screen and (width <=767px) {
+@media screen and (width <= 767px) {
     html {
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
     }
 }
 
-.btn-theme-dark {
-    color: var(--bs-dark);
-    background-color: var(--bs-gray-100);
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.01em;
 }
 
+/* Sidebar navigation: quiet items, white on hover, raised when active. */
+.nav-pills .nav-link {
+    color: var(--wedify-muted);
+    background-color: transparent;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-pills .nav-link:hover {
+    color: #ffffff;
+    background-color: #1f1f1f;
+}
+
+.nav-pills .nav-link.active {
+    color: #ffffff !important;
+    background-color: var(--wedify-elevated) !important;
+    box-shadow: inset 3px 0 0 var(--wedify-green);
+}
+
+.nav-pills .nav-link.active i {
+    color: var(--wedify-green);
+}
+
+.btn-theme-dark,
 .btn-theme-light {
-    color: var(--bs-light);
-    background-color: var(--bs-gray-800);
+    color: var(--wedify-muted);
+    background-color: transparent;
 }
 
+.btn-theme-dark:hover,
 .btn-theme-light:hover {
-    color: var(--bs-light);
-    background-color: var(--bs-gray-600);
-}
-
-.btn-theme-dark:hover {
-    color: var(--bs-dark);
-    background-color: var(--bs-gray-300);
-}
-
-.btn-theme-dark:focus {
-    color: var(--bs-dark);
-}
-
-.btn-theme-light:focus {
-    color: var(--bs-light);
+    color: #ffffff;
+    background-color: #1f1f1f;
 }
 
 .logout:hover {
-    color: var(--bs-light) !important;
-    background-color: var(--bs-danger) !important;
+    color: #ffffff !important;
+    background-color: #e8115b !important;
+    box-shadow: none;
 }
-/* Wedify branding: Spotify green primary actions + active pills. */
+
+/* Cards */
+.card {
+    --bs-card-bg: var(--wedify-card);
+    --bs-card-border-color: var(--wedify-border);
+    background-color: var(--wedify-card);
+    border: 1px solid var(--wedify-border);
+    border-radius: 1rem !important;
+}
+
+.list-group-item {
+    background-color: transparent;
+    border-color: var(--wedify-border);
+    color: #ffffff;
+}
+
+/* Forms */
+.form-label {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.form-control,
+.form-select {
+    background-color: var(--wedify-input);
+    border: 1px solid #3a3a3a;
+    color: #ffffff;
+    border-radius: 0.75rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #2a2a2a;
+    border-color: var(--wedify-green);
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+}
+
+.form-control::placeholder {
+    color: #8a8a8a;
+}
+
+.form-text {
+    color: #a7a7a7;
+}
+
+.form-check-input:checked {
+    background-color: var(--wedify-green);
+    border-color: var(--wedify-green);
+}
+
+.input-group-text {
+    background-color: var(--wedify-elevated);
+    border-color: #3a3a3a;
+    color: var(--wedify-muted);
+}
+
+/* Buttons: Spotify pills everywhere. */
+.btn {
+    border-radius: 999px !important;
+    font-weight: 600;
+}
+
 .btn-primary {
-    --bs-btn-bg: #1DB954;
-    --bs-btn-border-color: #1DB954;
-    --bs-btn-hover-bg: #1ed760;
-    --bs-btn-hover-border-color: #1ed760;
+    --bs-btn-bg: var(--wedify-green);
+    --bs-btn-border-color: var(--wedify-green);
+    --bs-btn-color: #000000;
+    --bs-btn-hover-bg: var(--wedify-green-hover);
+    --bs-btn-hover-border-color: var(--wedify-green-hover);
+    --bs-btn-hover-color: #000000;
     --bs-btn-active-bg: #169c46;
     --bs-btn-active-border-color: #169c46;
+    --bs-btn-active-color: #000000;
+    --bs-btn-disabled-bg: var(--wedify-green);
+    --bs-btn-disabled-border-color: var(--wedify-green);
+    --bs-btn-disabled-color: #000000;
+    font-weight: 700;
+    letter-spacing: 0.02em;
 }
-.nav-pills .nav-link.active {
-    background-color: #1DB954 !important;
+
+.btn-outline-secondary,
+.btn-outline-dark,
+.btn-outline-light {
+    --bs-btn-color: #ffffff;
+    --bs-btn-border-color: #727272;
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-hover-bg: transparent;
+    --bs-btn-hover-border-color: #ffffff;
+    --bs-btn-active-color: #ffffff;
+    --bs-btn-active-bg: transparent;
+    --bs-btn-active-border-color: #ffffff;
+}
+
+/* Tables */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #ffffff;
+    --bs-table-border-color: var(--wedify-border);
+    --bs-table-hover-bg: #1f1f1f;
+}
+
+.table thead th {
+    color: var(--wedify-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    border-bottom-width: 1px;
+}
+
+/* Modals, dropdowns, pagination, progress */
+.modal-content {
+    background-color: var(--wedify-card);
+    border: 1px solid #2c2c2c;
+    border-radius: 1.25rem !important;
+    color: #ffffff;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--wedify-border);
+}
+
+.dropdown-menu {
+    background-color: var(--wedify-elevated);
+    border: 1px solid var(--wedify-border);
+    border-radius: 0.75rem;
+}
+
+.dropdown-item {
+    color: #ffffff;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #2e2e2e;
+    color: #ffffff;
+}
+
+.page-link {
+    background-color: #1f1f1f;
+    border-color: #2f2f2f;
+    color: #ffffff;
+}
+
+.page-link:hover {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.page-item.active .page-link {
+    background-color: var(--wedify-green);
+    border-color: var(--wedify-green);
+    color: #000000;
+}
+
+.page-item.disabled .page-link {
+    background-color: #1a1a1a;
+    border-color: #2a2a2a;
+    color: #6a6a6a;
+}
+
+.progress {
+    background-color: #2a2a2a;
+}
+
+.progress-bar {
+    background-color: var(--wedify-green);
+}
+
+/* Mobile bottom navigation: black bar like the Spotify app. */
+.navbar.fixed-bottom {
+    background-color: #000000 !important;
+    border-top: 1px solid #262626 !important;
+}
+
+.navbar.fixed-bottom .nav-link {
+    color: var(--wedify-muted);
+}
+
+.navbar.fixed-bottom .nav-link.active {
+    color: #ffffff;
+}
+
+.navbar.fixed-bottom .nav-link.active i {
+    color: var(--wedify-green);
+}
+
+/* Placeholders + misc */
+.placeholder {
+    background-color: #3a3a3a;
+}
+
+.alert {
+    border-radius: 0.75rem;
+}
+
+a {
+    color: var(--wedify-green-hover);
+}
+
+a:hover {
+    color: var(--wedify-green);
+}
+
+.nav-pills .nav-link a,
+.navbar a {
+    color: inherit;
 }
