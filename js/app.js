@@ -5,6 +5,9 @@
 // hanya cadangan kalau API sedang tidak bisa dihubungi.
 // ============================================================
 const DEFAULT_SITE = {
+  groom_name: "Rahmatul Usra", bride_name: "Azizi Asadel",
+  album_title: "USRA & ZEE",
+  music_title: "River Flows in You", music_artist: "Usra & Zee",
   groom_short: "Usra", bride_short: "Zee",
   groom_parents: "Bapak ... & Ibu ...", groom_listeners: "1.205",
   bride_parents: "Bapak ... & Ibu ...", bride_listeners: "1.748",
@@ -178,18 +181,71 @@ function esc(t) {
   return String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 let wishes = [];
+const OWN_KEY = "wedify_own_v1";
+const LIKE_KEY = "wedify_likes_v1";
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* abaikan */ } },
+};
+let replyOpenFor = null;
+let editingFor = null;
+
+function findWish(list, uuid) {
+  for (const w of list) {
+    if (w.uuid === uuid) return w;
+    const hit = findWish(Array.isArray(w.comments) ? w.comments : [], uuid);
+    if (hit) return hit;
+  }
+  return null;
+}
+
+function wishHtml(w) {
+  const absent = w.presence === false;
+  const badge = absent ? "Berhalangan" : "Datang";
+  const ownMap = store.get(OWN_KEY);
+  const likeMap = store.get(LIKE_KEY);
+  const liked = Boolean(likeMap[w.uuid]);
+  const love = (w.like && w.like.love) || 0;
+  const kids = Array.isArray(w.comments) ? w.comments : [];
+  let h = '<div class="wish" data-uuid="' + w.uuid + '">';
+  h += '<div class="wish-head"><span class="wish-name">' + esc(w.name) +
+    (w.is_admin ? ' <span class="wish-admin">Admin</span>' : "") +
+    '</span><span class="wish-badge' + (absent ? " absent" : "") + '">' + badge + "</span></div>";
+  if (editingFor === w.uuid) {
+    h += '<form class="wish-edit-form" data-edit-form="' + w.uuid + '">' +
+      '<textarea class="f-in" name="emsg" rows="3" maxlength="500" required>' + esc(w.comment) + "</textarea>" +
+      '<span class="wish-form-btns"><button class="btn btn-green" type="submit">Simpan</button>' +
+      '<button class="btn btn-ghost" type="button" data-cancel-edit="1">Batal</button></span></form>';
+  } else {
+    h += '<div class="wish-msg">' + esc(w.comment) + "</div>";
+  }
+  h += '<div class="wish-foot"><span class="wish-time">' + esc(w.created_at || "") + '</span>' +
+    '<span class="wish-actions">' +
+    '<button type="button" class="wish-act wish-like' + (liked ? " liked" : "") + '" data-like="' + w.uuid + '">♥ <span>' + love + "</span></button>" +
+    '<button type="button" class="wish-act" data-reply="' + w.uuid + '">Balas</button>' +
+    (ownMap[w.uuid] ? '<button type="button" class="wish-act" data-edit="' + w.uuid + '">Edit</button>' +
+      '<button type="button" class="wish-act" data-del="' + w.uuid + '">Hapus</button>' : "") +
+    "</span></div>";
+  if (replyOpenFor === w.uuid) {
+    h += '<form class="wish-reply-form" data-reply-form="' + w.uuid + '">' +
+      '<input class="f-in" name="rname" type="text" placeholder="Nama kamu" maxlength="60" required>' +
+      '<textarea class="f-in" name="rmsg" rows="2" placeholder="Tulis balasan..." maxlength="500" required></textarea>' +
+      '<span class="wish-form-btns"><button class="btn btn-green" type="submit">Kirim Balasan</button>' +
+      '<button class="btn btn-ghost" type="button" data-cancel-reply="1">Batal</button></span></form>';
+  }
+  if (kids.length) {
+    h += '<div class="wish-replies">' + kids.map((k) => wishHtml(k)).join("") + "</div>";
+  }
+  h += "</div>";
+  return h;
+}
+
 function renderWishes() {
   const box = $("#wishList");
   $("#wishEmpty").classList.toggle("off", wishes.length > 0);
-  box.innerHTML = wishes.map((w) => {
-    const absent = w.presence === false;
-    const badge = absent ? "Berhalangan" : "Datang";
-    return '<div class="wish"><div class="wish-head"><span class="wish-name">' + esc(w.name) +
-      '</span><span class="wish-badge' + (absent ? " absent" : "") + '">' + badge +
-      '</span></div><div class="wish-msg">' + esc(w.comment) +
-      '</div><div class="wish-time">' + esc(w.created_at || "") + "</div></div>";
-  }).join("");
+  box.innerHTML = wishes.map((w) => wishHtml(w)).join("");
 }
+
 async function loadWishes() {
   if (!ACCESS_KEY) return;
   try {
@@ -201,6 +257,124 @@ async function loadWishes() {
     }
   } catch (e) { /* biarkan kosong */ }
 }
+
+async function toggleLike(uuid, btn) {
+  const likeMap = store.get(LIKE_KEY);
+  const w = findWish(wishes, uuid);
+  if (!w) return;
+  btn.disabled = true;
+  try {
+    if (likeMap[uuid]) {
+      const res = await fetch("/api/comment/" + encodeURIComponent(likeMap[uuid]), {
+        method: "PATCH", headers: { "x-access-key": ACCESS_KEY },
+      });
+      if (res.ok) {
+        delete likeMap[uuid];
+        w.like = w.like || { love: 0 };
+        w.like.love = Math.max(0, (w.like.love || 0) - 1);
+      }
+    } else {
+      const res = await fetch("/api/comment/" + encodeURIComponent(uuid), {
+        method: "POST", headers: { "x-access-key": ACCESS_KEY },
+      });
+      const json = await res.json();
+      if (res.ok && json.data && json.data.uuid) {
+        likeMap[uuid] = json.data.uuid;
+        w.like = w.like || { love: 0 };
+        w.like.love = (w.like.love || 0) + 1;
+      }
+    }
+    store.set(LIKE_KEY, likeMap);
+    renderWishes();
+  } catch (e) { /* abaikan */ } finally {
+    btn.disabled = false;
+  }
+}
+
+$("#wishList").addEventListener("click", async (e) => {
+  const likeBtn = e.target.closest("[data-like]");
+  if (likeBtn) { toggleLike(likeBtn.dataset.like, likeBtn); return; }
+  const replyBtn = e.target.closest("[data-reply]");
+  if (replyBtn) {
+    replyOpenFor = replyOpenFor === replyBtn.dataset.reply ? null : replyBtn.dataset.reply;
+    editingFor = null;
+    renderWishes();
+    const ta = $("#wishList").querySelector("[data-reply-form] textarea");
+    if (ta) ta.focus();
+    return;
+  }
+  if (e.target.closest("[data-cancel-reply]")) { replyOpenFor = null; renderWishes(); return; }
+  if (e.target.closest("[data-cancel-edit]")) { editingFor = null; renderWishes(); return; }
+  const editBtn = e.target.closest("[data-edit]");
+  if (editBtn) { editingFor = editBtn.dataset.edit; replyOpenFor = null; renderWishes(); return; }
+  const delBtn = e.target.closest("[data-del]");
+  if (delBtn) {
+    const uuid = delBtn.dataset.del;
+    const ownMap = store.get(OWN_KEY);
+    if (!ownMap[uuid] || !confirm("Hapus ucapan ini?")) return;
+    try {
+      const res = await fetch("/api/comment/" + encodeURIComponent(ownMap[uuid]), {
+        method: "DELETE", headers: { "x-access-key": ACCESS_KEY },
+      });
+      if (res.ok) {
+        delete ownMap[uuid];
+        store.set(OWN_KEY, ownMap);
+        loadWishes();
+      } else {
+        alert("Gagal menghapus ucapan.");
+      }
+    } catch (err) { alert("Koneksi bermasalah, coba lagi."); }
+  }
+});
+
+$("#wishList").addEventListener("submit", async (e) => {
+  const replyForm = e.target.closest("[data-reply-form]");
+  const editForm = e.target.closest("[data-edit-form]");
+  if (!replyForm && !editForm) return;
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  if (replyForm) {
+    const parentUuid = replyForm.dataset.replyForm;
+    const name = String(fd.get("rname") || "").trim();
+    const msg = String(fd.get("rmsg") || "").trim();
+    if (!name || !msg) return;
+    const presence = $("#wishPresence").value === "Berhalangan" ? 2 : 1;
+    try {
+      const res = await fetch("/api/comment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-access-key": ACCESS_KEY },
+        body: JSON.stringify({ name, presence, comment: msg, id: parentUuid }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.data) { alert((json.error && json.error[0]) || "Gagal mengirim balasan."); return; }
+      const ownMap = store.get(OWN_KEY);
+      ownMap[json.data.uuid] = json.data.own;
+      store.set(OWN_KEY, ownMap);
+      replyOpenFor = null;
+      loadWishes();
+    } catch (err) { alert("Koneksi bermasalah, coba lagi."); }
+  }
+  if (editForm) {
+    const uuid = editForm.dataset.editForm;
+    const ownMap = store.get(OWN_KEY);
+    const msg = String(fd.get("emsg") || "").trim();
+    if (!ownMap[uuid] || !msg) return;
+    try {
+      const res = await fetch("/api/comment/" + encodeURIComponent(ownMap[uuid]), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "x-access-key": ACCESS_KEY },
+        body: JSON.stringify({ comment: msg }),
+      });
+      const json = await res.json();
+      if (!res.ok) { alert((json.error && json.error[0]) || "Gagal menyimpan perubahan."); return; }
+      const w = findWish(wishes, uuid);
+      if (w) w.comment = msg;
+      editingFor = null;
+      renderWishes();
+    } catch (err) { alert("Koneksi bermasalah, coba lagi."); }
+  }
+});
+
 $("#wishForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = $("#wishName").value.trim();
@@ -221,6 +395,9 @@ $("#wishForm").addEventListener("submit", async (e) => {
       alert((json.error && json.error[0]) || "Gagal mengirim ucapan.");
       return;
     }
+    const ownMap = store.get(OWN_KEY);
+    ownMap[json.data.uuid] = json.data.own;
+    store.set(OWN_KEY, ownMap);
     wishes.unshift(json.data);
     renderWishes();
     $("#wishMsg").value = "";
@@ -246,11 +423,14 @@ function applySite() {
   document.title = "Wedify — " + duo + ": " + String(SITE.album_subtitle || "").split("•")[0].trim();
   setText("#coverLabel", "WEDIFY ORIGINAL SOUNDTRACK • " + year);
   const ct = $("#coverTitle");
-  if (ct) ct.innerHTML = esc(duo) + ":<br>" + esc(String(SITE.album_subtitle || "").split("•")[0].trim());
+  if (ct) ct.innerHTML = esc(SITE.album_title || duo) + ":<br>" + esc(String(SITE.album_subtitle || "").split("•")[0].trim());
   setText("#coverArtist", "Album • " + duo);
   setText("#coverMeta", SITE.wrapped_match + " match • 2 tracks • 1 hari spesial");
   $$('img[data-album-art]').forEach((img) => { img.src = SITE.album_art; });
-  setText("#npArtist", duo);
+  setText("#npArtist", SITE.music_artist || duo);
+  setText("#npTitle", SITE.music_title);
+  setText("#playerTitle", SITE.music_title);
+  setText("#playerArtist", SITE.music_artist || duo);
   setText("#npMetaText", SITE.wrapped_match + " match • " + year + " • Single • Untuk: ");
   setText("#cdDate", SITE.date_label + " • " + SITE.venue_name);
   setText("#track1Title", SITE.akad_desc);
@@ -274,8 +454,8 @@ function applySite() {
   }
   const ga = $("#groomAva"); if (ga) ga.src = SITE.groom_photo;
   const ba = $("#brideAva"); if (ba) ba.src = SITE.bride_photo;
-  const gn = $("#groomName"); if (gn) gn.childNodes[0].textContent = SITE.groom_short + " ";
-  const bn = $("#brideName"); if (bn) bn.childNodes[0].textContent = SITE.bride_short + " ";
+  const gn = $("#groomName"); if (gn) gn.childNodes[0].textContent = (SITE.groom_name || SITE.groom_short) + " ";
+  const bn = $("#brideName"); if (bn) bn.childNodes[0].textContent = (SITE.bride_name || SITE.bride_short) + " ";
   setText("#groomSub", "Putra dari " + SITE.groom_parents + " • " + SITE.groom_listeners + " pendengar bulanan");
   setText("#brideSub", "Putri dari " + SITE.bride_parents + " • " + SITE.bride_listeners + " pendengar bulanan");
   setText("#wMatch", SITE.wrapped_match);

@@ -133,15 +133,12 @@
                     <section class="tab-pane fade show active" id="pills-home" role="tabpanel" tabindex="0">
 
                         <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
+                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
                             <div class="d-flex justify-content-between">
-                                <p class="fw-semibold m-1" style="color: var(--bs-gray-900);"><i class="fa-solid fa-home mx-2"></i>Home</p>
+                                <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-home mx-2"></i>Home</p>
                                 <div class="d-flex">
                                     <button class="btn btn-success rounded-3 btn-sm my-0 ms-0 me-2 pb-0" onclick="admin.download(this)" offline-disabled>
                                         <i class="fa-solid fa-download"></i><span class="d-none d-sm-inline ms-2">Download</span>
-                                    </button>
-                                    <button class="btn btn-secondary rounded-3 btn-sm m-0 pb-0" onclick="theme.change()">
-                                        <i class="fa-solid fa-circle-half-stroke"></i><span class="d-none d-sm-inline ms-2">Theme</span>
                                     </button>
                                 </div>
                             </div>
@@ -320,8 +317,8 @@
                     <section class="tab-pane fade" id="pills-setting" role="tabpanel" tabindex="0">
 
                         <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
-                            <p class="fw-semibold m-1" style="color: var(--bs-gray-900);"><i class="fa-solid fa-gear mx-2"></i>Setting</p>
+                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
+                            <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-gear mx-2"></i>Setting</p>
                         </div>
 
                         <!-- Email -->
@@ -421,9 +418,9 @@
                     <section class="tab-pane fade" id="pills-konten" role="tabpanel" tabindex="0">
 
                         <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
+                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
                             <div class="d-flex justify-content-between">
-                                <p class="fw-semibold m-1" style="color: var(--bs-gray-900);"><i class="fa-solid fa-pen-to-square mx-2"></i>Konten Web</p>
+                                <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-pen-to-square mx-2"></i>Konten Web</p>
                             </div>
                         </div>
 
@@ -635,8 +632,8 @@
                     <section class="tab-pane fade" id="pills-guest" role="tabpanel" tabindex="0">
 
                         <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
-                            <p class="fw-semibold m-1" style="color: var(--bs-gray-900);"><i class="fa-solid fa-users mx-2"></i>Tamu</p>
+                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
+                            <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-users mx-2"></i>Tamu</p>
                         </div>
 
                         <!-- Generator -->
@@ -692,6 +689,7 @@
                             <label for="loginPassword" class="form-label"><i class="fa-solid fa-lock me-1"></i>Password</label>
                             <input type="password" class="form-control shadow-sm rounded-4" id="loginPassword" placeholder="Masukkan password Anda" required autocomplete="current-password">
                         </div>
+                        <div class="alert alert-danger d-none py-2 rounded-4" id="loginError" role="alert" style="font-size: 0.9rem;"></div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary shadow-sm rounded-4" onclick="admin.login(this)"><i class="fa-solid fa-right-to-bracket me-1"></i>Login</button>
                         </div>

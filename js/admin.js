@@ -225,7 +225,16 @@ export const admin = (() => {
         formEmail.disabled = true;
         formPassword.disabled = true;
 
+        const loginError = document.getElementById('loginError');
+        if (loginError) {
+            loginError.classList.add('d-none');
+        }
+
         const res = await session.login(dto.postSessionRequest(formEmail.value, formPassword.value));
+        if (!res && loginError) {
+            loginError.textContent = 'Email atau password salah. Coba lagi.';
+            loginError.classList.remove('d-none');
+        }
         if (res) {
             getUserDetail();
             guests.load();

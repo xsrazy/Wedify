@@ -187,3 +187,21 @@ textarea.f-in{resize:vertical}
 
 .artist-fans { font-size: .78rem; color: #b3b3b3; margin-top: 2px; }
 .follow-btn:disabled { opacity: .6; }
+
+/* guestbook actions: like / reply / own edit-delete (audit fix) */
+.wish-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px}
+.wish-foot .wish-time{margin-top:0}
+.wish-actions{display:inline-flex;gap:13px;align-items:center}
+.wish-act{background:none;border:0;color:var(--sub);font:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:2px 0}
+.wish-act:hover{color:#fff}
+.wish-act:disabled{opacity:.5;cursor:default}
+.wish-like.liked{color:#e8115b}
+.wish-admin{font-size:10px;font-weight:800;color:#000;background:var(--green);border-radius:4px;padding:1px 5px;vertical-align:2px}
+.wish-replies{margin-top:10px;display:flex;flex-direction:column;gap:10px;border-left:2px solid rgba(255,255,255,.12);padding-left:12px}
+.wish-reply-form,.wish-edit-form{display:grid;gap:8px;margin-top:10px}
+.wish-form-btns{display:inline-flex;gap:8px}
+.wish-form-btns .btn{padding:8px 16px;font-size:13px}
+.btn-ghost{background:transparent;border:1px solid #4d4d4d;color:#fff;border-radius:999px;font-weight:600;cursor:pointer}
+.btn-ghost:hover{border-color:#fff}
+.wstat{min-width:0}
+.w-num{overflow-wrap:break-word}
