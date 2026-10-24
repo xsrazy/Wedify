@@ -275,7 +275,9 @@ function wishHtml(w) {
   let h = '<div class="wish" data-uuid="' + w.uuid + '">';
   h += '<div class="wish-head"><span class="wish-name">' + esc(w.name) +
     (w.is_admin ? ' <span class="wish-admin">Admin</span>' : "") +
-    '</span><span class="wish-badge' + (absent ? " absent" : unsure ? " unsure" : "") + '">' + badge + "</span></div>";
+    '</span><span class="wish-badges">' +
+    (w.pinned ? '<span class="wish-badge pinned"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true" style="vertical-align:-1px"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg> Disematkan</span>' : "") +
+    '<span class="wish-badge' + (absent ? " absent" : unsure ? " unsure" : "") + '">' + badge + "</span></span></div>";
   if (editingFor === w.uuid) {
     h += '<form class="wish-edit-form" data-edit-form="' + w.uuid + '">' +
       '<textarea class="f-in" name="emsg" rows="3" maxlength="500" required>' + esc(w.comment) + "</textarea>" +
@@ -308,7 +310,11 @@ function wishHtml(w) {
 function renderWishes() {
   const box = $("#wishList");
   $("#wishEmpty").classList.toggle("off", wishes.length > 0);
-  box.innerHTML = wishes.map((w) => wishHtml(w)).join("");
+  // The pinned comment (at most one) always leads the list; the server
+  // already orders this way, but re-applying here keeps it first even
+  // after a fresh local post is unshifted to the front.
+  const ordered = wishes.slice().sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+  box.innerHTML = ordered.map((w) => wishHtml(w)).join("");
 }
 
 async function loadWishes() {

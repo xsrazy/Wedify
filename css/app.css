@@ -237,6 +237,8 @@ textarea.f-in{resize:vertical}
 .wish-badge{font-size:11px;font-weight:700;color:#000;background:var(--green);border-radius:999px;padding:2px 9px;white-space:nowrap}
 .wish-badge.absent{background:#4d4d4d;color:#fff}
 .wish-badge.unsure{background:#b98a1e;color:#fff}
+.wish-badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.wish-badge.pinned{background:#fff;color:#000}
 .wish-msg{color:#e6e6e6;font-size:13.5px;line-height:1.55;margin-top:5px;white-space:pre-wrap;word-break:break-word}
 .wish-time{color:var(--sub);font-size:11.5px;margin-top:6px}
 .wish-empty{color:var(--sub);font-size:13px;margin-top:14px;text-align:center}

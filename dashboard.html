@@ -1,734 +1,265 @@
 <!doctype html>
-<html lang="id" data-bs-theme="dark">
-
+<html lang="id">
 <head>
-    <!-- Common -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard | Wedify</title>
     <meta name="robots" content="noindex, nofollow">
-
-    <!-- Appearance -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Dashboard Wedify">
     <meta name="theme-color" content="#000000">
-    <meta name="color-scheme" content="dark light">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="color-scheme" content="dark">
     <link rel="canonical" href="https://wedify.xsrazy.web.id/dashboard">
     <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="./assets/images/favicon.ico">
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/images/icon-512x512.png">
     <link rel="apple-touch-icon" sizes="192x192" href="./assets/images/apple-touch-icon.png">
-
-    <!-- Preconnect CDN -->
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Preload Resources -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" integrity="sha256-WAgYcAck1C1/zEl5sBl5cfyhxtLgKGdpI3oKyJffVRI=" crossorigin="anonymous" as="style">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha256-PI8n5gCcz9cQqQXm3PEtDuPG8qx9oFsFctPg0S5zb8g=" crossorigin="anonymous" as="style">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous" as="style">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha256-CDOy6cOibCWEdsRiZuaHf8dSGGJRYuBGC+mjoJimHGw=" crossorigin="anonymous" as="script">
-
-    <!-- Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
-
-    <!-- Dependencies CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" integrity="sha256-WAgYcAck1C1/zEl5sBl5cfyhxtLgKGdpI3oKyJffVRI=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha256-PI8n5gCcz9cQqQXm3PEtDuPG8qx9oFsFctPg0S5zb8g=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
-
-<!-- Data theme ['auto', 'dark', 'light'] -->
-
-<body data-url="/" data-theme="dark">
-
-    <!-- Nav bottom -->
-    <nav class="navbar bg-light navbar-expand fixed-bottom rounded-top-4 border-top d-md-none d-lg-none d-xl-none p-0">
-        <ul class="navbar-nav nav-justified w-100 align-items-center">
-            <li class="nav-item">
-                <button class="nav-link active" onclick="admin.navbar.buttonNavHome(this)" id="button-mobile-home">
-                    <i class="fa-solid fa-house"></i>
-                    <span class="d-block" style="font-size: 0.7rem;">Home</span>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" onclick="admin.navbar.buttonNavSetting(this)" id="button-mobile-setting">
-                    <i class="fa-solid fa-gear"></i>
-                    <span class="d-block" style="font-size: 0.7rem;">Setting</span>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" onclick="admin.navbar.buttonNavGuest(this)" id="button-mobile-guest">
-                    <i class="fa-solid fa-users"></i>
-                    <span class="d-block" style="font-size: 0.7rem;">Tamu</span>
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" onclick="admin.navbar.buttonNavKonten(this)" id="button-mobile-konten">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <span class="d-block" style="font-size: 0.7rem;">Konten</span>
-                </button>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main -->
-    <main class="container mt-4 mb-5">
-
-        <!-- Header -->
-        <div class="d-none d-sm-flex justify-content-between align-items-center mt-4 mb-5 pt-1">
-            <h4 class="m-0 p-0 flex-grow-1 fw-bold">Wedify<i class="fa-solid fa-music ms-2" style="color: #1DB954;"></i></h4>
-            <h4 class="m-0 p-0 flex-grow-1 text-end" id="dashboard-name">
-                <div class="placeholder-wave">
-                    <span class="placeholder col-6 rounded-4"></span>
+<body>
+    <!-- Login -->
+    <div id="loginScreen" class="login-screen" hidden>
+        <div class="login-card">
+            <div class="login-wordmark">Wedify<span>.</span></div>
+            <p class="login-sub">Dashboard admin undangan</p>
+            <form id="loginForm">
+                <div class="field">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Masukkan email Anda" required autocomplete="email">
                 </div>
-            </h4>
-        </div>
-
-        <!-- Body -->
-        <div class="row">
-
-            <!-- Menu -->
-            <div class="col-md-3 d-none d-md-block">
-                <div class="pe-3">
-                    <ul class="nav flex-column w-100 nav-pills" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="btn-theme-dark nav-link w-100 text-start fw-semibold mb-1 rounded-4 active" data-bs-toggle="pill" data-bs-target="#pills-home" id="button-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
-                                <i class="fa-solid fa-house ms-3 me-2"></i>Home
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="btn-theme-dark nav-link w-100 text-start fw-semibold my-1 rounded-4" data-bs-toggle="pill" data-bs-target="#pills-setting" id="button-setting" type="button" role="tab" aria-controls="pills-setting" aria-selected="false">
-                                <i class="fa-solid fa-gear ms-3 me-2"></i>Setting
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="btn-theme-dark nav-link w-100 text-start fw-semibold my-1 rounded-4" data-bs-toggle="pill" data-bs-target="#pills-guest" id="button-guest" type="button" role="tab" aria-controls="pills-guest" aria-selected="false">
-                                <i class="fa-solid fa-users ms-3 me-2"></i>Tamu
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="btn-theme-dark nav-link w-100 text-start fw-semibold my-1 rounded-4" data-bs-toggle="pill" data-bs-target="#pills-konten" id="button-konten" type="button" role="tab" aria-controls="pills-konten" aria-selected="false">
-                                <i class="fa-solid fa-pen-to-square ms-3 me-2"></i>Konten Web
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <hr class="my-2">
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="btn-theme-dark logout nav-link w-100 text-start fw-semibold mt-1 rounded-4" onclick="admin.logout()">
-                                <i class="fa-solid fa-right-from-bracket ms-3 me-2"></i>Logout
-                            </button>
-                        </li>
-                    </ul>
+                <div class="field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Masukkan password Anda" required autocomplete="current-password">
                 </div>
-            </div>
-
-            <!-- Content -->
-            <div class="col-md-9">
-                <div class="tab-content">
-
-                    <!-- Home -->
-                    <section class="tab-pane fade show active" id="pills-home" role="tabpanel" tabindex="0">
-
-                        <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
-                            <div class="d-flex justify-content-between">
-                                <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-home mx-2"></i>Home</p>
-                                <div class="d-flex">
-                                    <button class="btn btn-success rounded-3 btn-sm my-0 ms-0 me-2 pb-0" onclick="admin.download(this)" offline-disabled>
-                                        <i class="fa-solid fa-download"></i><span class="d-none d-sm-inline ms-2">Download</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Stats -->
-                        <div class="row">
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #8D9EFF;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Comments</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-comment">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-comments me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-comments fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #8D72E1;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Present</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-present">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-circle-check me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-circle-check fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #7766CF;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Absent</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-absent">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-circle-xmark me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-circle-xmark fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #B98A1E;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Masih Ragu</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-unsure">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-circle-question me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-circle-question fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #6C4AB6;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Likes</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-like">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-heart me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-heart fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #1DB954;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Penggemar Usra</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-follow-groom">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-user-plus me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-user-plus fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xl-3 col-6 mb-3">
-                                <div class="rounded-4 shadow p-3 border-0" style="background: #E8115B;">
-                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                        <div class="col-9">
-                                            <p class="fw-bold m-0 p-0">Penggemar Zee</p>
-                                            <h6 class="fw-bold m-0 p-0" id="count-follow-bride">
-                                                <div class="placeholder-wave">
-                                                    <span class="placeholder col-8 rounded-3"></span>
-                                                </div>
-                                            </h6>
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="d-md-none d-lg-none d-xl-none">
-                                                <i class="fa-solid fa-user-plus me-2" style="font-size: 1.5em;"></i>
-                                            </div>
-                                            <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                <i class="fa-solid fa-user-plus fa-2x me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Form -->
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <label for="form-comment" class="form-label fw-bold"><i class="fa-solid fa-comment me-1"></i>Comment</label>
-                            <textarea class="form-control shadow-sm mb-3 rounded-4" id="form-comment" name="form-comment" rows="3" placeholder="Type to comment" offline-disabled></textarea>
-
-                            <div class="d-flex justify-content-end mb-0">
-                                <button onclick="comment.send(this)" class="btn btn-primary btn-sm rounded-4" style="font-size: 0.8rem;" offline-disabled><i class="fa-solid fa-paper-plane me-1"></i>Send</button>
-                            </div>
-                        </div>
-
-                        <!-- Comments -->
-                        <div class="my-2 pt-3" id="comments" data-loading="false"></div>
-
-                        <!-- Pagination -->
-                        <nav class="d-flex d-none justify-content-center py-3 mb-4" id="pagination">
-                            <ul class="pagination mb-0">
-                                <li class="page-item disabled" id="previous">
-                                    <button class="page-link rounded-start-4" onclick="pagination.previous(this)" offline-disabled>
-                                        <i class="fa-solid fa-circle-left me-1"></i>Prev
-                                    </button>
-                                </li>
-                                <li class="page-item disabled">
-                                    <span class="page-link text-dark" id="page">1</span>
-                                </li>
-                                <li class="page-item" id="next">
-                                    <button class="page-link rounded-end-4" onclick="pagination.next(this)" offline-disabled>
-                                        Next<i class="fa-solid fa-circle-right ms-1"></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
-                    </section>
-
-                    <!-- Setting -->
-                    <section class="tab-pane fade" id="pills-setting" role="tabpanel" tabindex="0">
-
-                        <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
-                            <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-gear mx-2"></i>Setting</p>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-envelope me-1"></i>Email</p>
-                            <p class="m-0 p-0" id="dashboard-email"></p>
-                        </div>
-
-                        <!-- Name -->
-                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-person me-1"></i>Name</p>
-                            <form>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control form-control-sm rounded-4" id="form-name" name="form-name" oninput="admin.enableButtonName()" offline-disabled>
-                                </div>
-                            </form>
-
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-sm btn-primary rounded-4" id="button-change-name" onclick="admin.changeName(this)" disabled offline-disabled>Change</button>
-                            </div>
-                        </div>
-
-                        <!-- Access Key -->
-                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-key me-1"></i>Access Key</p>
-
-                            <div class="input-group input-group-sm rounded-4 mb-3">
-                                <input type="text" class="form-control form-control-sm rounded-start-4" id="dashboard-accesskey" readonly>
-                                <button class="btn btn-sm btn-outline-secondary rounded-end-4" type="button" data-copy="" onclick="util.copy(this)" id="button-copy-accesskey" offline-disabled><i class="fa-solid fa-copy"></i></button>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-sm btn-primary rounded-4" onclick="admin.regenerate(this)" offline-disabled>Regenerate</button>
-                            </div>
-                        </div>
-
-                        <!-- Toggle -->
-                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-sliders me-1"></i>Control</p>
-
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" role="button" id="filterBadWord" onchange="admin.changeFilterBadWord(this)" offline-disabled>
-                                <label class="form-check-label" for="filterBadWord">Filter Bad Word</label>
-                            </div>
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" role="button" id="replyComment" onchange="admin.replyComment(this)" offline-disabled>
-                                <label class="form-check-label" for="replyComment">Can Reply Comment</label>
-                            </div>
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" role="button" id="editComment" onchange="admin.editComment(this)" offline-disabled>
-                                <label class="form-check-label" for="editComment">Can Edit Comment</label>
-                            </div>
-                            <div class="form-check form-switch mb-1">
-                                <input class="form-check-input" type="checkbox" role="button" id="deleteComment" onchange="admin.deleteComment(this)" offline-disabled>
-                                <label class="form-check-label" for="deleteComment">Can Delete Comment</label>
-                            </div>
-                        </div>
-
-                        <!-- Change Password -->
-                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-lock me-1"></i>Change Password</p>
-                            <form>
-                                <input hidden type="text" name="username" autocomplete="username" value="...">
-                                <div class="my-2">
-                                    <input type="password" class="form-control form-control-sm rounded-4" id="old_password" name="old_password" placeholder="Old Password" autocomplete="current-password" offline-disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <input type="password" class="form-control form-control-sm rounded-4" id="new_password" name="new_password" oninput="admin.enableButtonPassword()" placeholder="New Password" autocomplete="new-password" offline-disabled>
-                                </div>
-                            </form>
-
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-sm btn-primary rounded-4" id="button-change-password" onclick="admin.changePassword(this)" disabled offline-disabled>Change</button>
-                            </div>
-                        </div>
-
-                        <!-- Logout -->
-                        <div class="d-md-none d-lg-none d-xl-none">
-                            <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                <button type="button" class="btn btn-danger btn-sm w-100 text-center fw-semibold rounded-4" onclick="admin.logout()" offline-disabled>
-                                    <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="p-3 bg-theme-light mb-4 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-heart me-1"></i>Project</p>
-                            <p class="m-0 p-0">
-                                If you want to support me, consider <a target="_blank" href="https://buymeacoffee.com/xsrazy">buying me a coffee</a><i class="fa-solid fa-mug-hot ms-1"></i>
-                            </p>
-                        </div>
-
-                    </section>
-
-                    <!-- Tamu -->
-                    <!-- Konten Web -->
-                    <section class="tab-pane fade" id="pills-konten" role="tabpanel" tabindex="0">
-
-                        <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
-                            <div class="d-flex justify-content-between">
-                                <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-pen-to-square mx-2"></i>Konten Web</p>
-                            </div>
-                        </div>
-
-                        <p class="text-muted" style="font-size: 0.9rem;">Semua teks, foto, musik, jadwal, dan rekening di halaman undangan diatur dari sini. Simpan, lalu buka halaman undangan untuk melihat hasilnya.</p>
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <p class="fw-bold mb-3"><i class="fa-solid fa-heart me-2"></i>Mempelai</p>
-                            <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-groom_name">Nama lengkap pria</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-groom_name">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-groom_short">Nama panggilan pria</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-groom_short">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-groom_parents">Orang tua pria</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-groom_parents">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-groom_listeners">Pendengar bulanan pria (teks)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-groom_listeners">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-bride_name">Nama lengkap wanita</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-bride_name">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-bride_short">Nama panggilan wanita</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-bride_short">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-bride_parents">Orang tua wanita</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-bride_parents">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-bride_listeners">Pendengar bulanan wanita (teks)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-bride_listeners">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <p class="fw-bold mb-3"><i class="fa-solid fa-compact-disc me-2"></i>Album & Musik</p>
-                            <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-album_title">Judul album</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-album_title">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-album_subtitle">Subjudul album</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-album_subtitle">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-album_art">Cover album (URL/path)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-album_art">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-music_url">File musik (URL/path)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-music_url">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-groom_photo">Foto pria (URL/path)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-groom_photo">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-bride_photo">Foto wanita (URL/path)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-bride_photo">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-music_title">Judul lagu</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-music_title">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-music_artist">Artis lagu</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-music_artist">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <p class="fw-bold mb-3"><i class="fa-solid fa-calendar-days me-2"></i>Acara</p>
-                            <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-wedding_iso">Tanggal & jam (ISO)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-wedding_iso"><small class="text-muted">Format: 2050-01-17T10:00:00+07:00, untuk countdown</small>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-date_label">Label tanggal</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-date_label">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-akad_time">Jam akad</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-akad_time">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-akad_desc">Judul track 1</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-akad_desc">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-resepsi_time">Jam resepsi</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-resepsi_time">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-resepsi_desc">Judul track 2</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-resepsi_desc">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-venue_name">Nama venue</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-venue_name">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-venue_address">Alamat venue</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-venue_address">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-maps_url">Link Google Maps</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-maps_url">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-cal_start">Kalender mulai (UTC)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-cal_start"><small class="text-muted">Format: 20500117T030000Z</small>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-cal_end">Kalender selesai (UTC)</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-cal_end"><small class="text-muted">Format: 20500117T040000Z</small>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-dress_1">Dress code 1</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-dress_1">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-dress_2">Dress code 2</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-dress_2">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <p class="fw-bold mb-3"><i class="fa-solid fa-align-left me-2"></i>Lirik & Wrapped</p>
-                            <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-lyrics_text">Teks lirik/ayat</label>
-                                <textarea class="form-control shadow-sm rounded-4" id="site-lyrics_text" rows="4"></textarea>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-lyrics_source">Sumber ayat</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-lyrics_source">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-wrapped_match">Wrapped: match</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-wrapped_match">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-wrapped_genre">Wrapped: genre</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-wrapped_genre">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-wrapped_collab">Wrapped: kolaborasi</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-wrapped_collab">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <p class="fw-bold mb-3"><i class="fa-solid fa-gift me-2"></i>Love Gift</p>
-                            <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gift1_bank">Gift 1: bank/e-wallet</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-gift1_bank">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gift1_number">Gift 1: nomor</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-gift1_number">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gift1_owner">Gift 1: atas nama</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-gift1_owner">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gift2_bank">Gift 2: bank/e-wallet</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-gift2_bank">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gift2_number">Gift 2: nomor</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-gift2_number">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gift2_owner">Gift 2: atas nama</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-gift2_owner">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                            <p class="fw-bold mb-3"><i class="fa-solid fa-images me-2"></i>Galeri & Bagikan</p>
-                            <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-gallery_urls">URL foto galeri</label>
-                                <textarea class="form-control shadow-sm rounded-4" id="site-gallery_urls" rows="4"></textarea><small class="text-muted">Satu URL per baris</small>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" for="site-share_text">Teks tombol bagikan</label>
-                                <input type="text" class="form-control shadow-sm rounded-4" id="site-share_text">
-                            </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-3 mb-4">
-                            <button class="btn btn-success rounded-4 px-4" onclick="site.save(this)" offline-disabled><i class="fa-solid fa-floppy-disk me-2"></i>Simpan Konten</button>
-                        </div>
-                    </section>
-
-                    <section class="tab-pane fade" id="pills-guest" role="tabpanel" tabindex="0">
-
-                        <!-- Sub Header -->
-                        <div class="rounded-4 p-2 mb-4 shadow" style="background-color: #232323">
-                            <p class="fw-semibold m-1" style="color: #ffffff;"><i class="fa-solid fa-users mx-2"></i>Tamu</p>
-                        </div>
-
-                        <!-- Generator -->
-                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-2 p-0 fw-bold"><i class="fa-solid fa-link me-1"></i>Buat Link Undangan</p>
-
-                            <div class="mb-2">
-                                <label for="guest-name" class="form-label mb-1" style="font-size: 0.85rem;">Nama Tamu</label>
-                                <input type="text" class="form-control form-control-sm rounded-4" id="guest-name" placeholder="cth: Bapak Budi Sekeluarga" offline-disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="guest-phone" class="form-label mb-1" style="font-size: 0.85rem;">No. WhatsApp (opsional, buat kirim langsung)</label>
-                                <input type="tel" class="form-control form-control-sm rounded-4" id="guest-phone" placeholder="cth: 081234567890" offline-disabled>
-                            </div>
-
-                            <p class="m-0 p-0 text-break" style="font-size: 0.85rem;">Link: <span id="guest-link-preview">https://wedify.xsrazy.web.id/?to=Nama+Tamu</span></p>
-
-                            <div class="d-flex flex-wrap gap-2 mt-3">
-                                <a class="btn btn-success btn-sm rounded-4" id="guest-wa-button" target="_blank" rel="noopener" href="#"><i class="fa-brands fa-whatsapp me-1"></i>Kirim via WhatsApp</a>
-                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-4" id="guest-copy-button" data-copy="" onclick="util.copy(this, 'Tersalin')"><i class="fa-solid fa-copy me-1"></i>Salin Link</button>
-                                <button type="button" class="btn btn-primary btn-sm rounded-4" onclick="guests.add(this)" offline-disabled><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Tamu</button>
-                            </div>
-                        </div>
-
-                        <!-- Saved guests -->
-                        <div class="p-3 bg-theme-light mb-4 rounded-4 shadow">
-                            <p class="mx-0 mt-0 mb-2 p-0 fw-bold"><i class="fa-solid fa-address-book me-1"></i>Daftar Tamu Tersimpan</p>
-                            <div id="guest-list">
-                                <p class="m-0 p-0 text-center" style="font-size: 0.9rem;">Memuat...</p>
-                            </div>
-                        </div>
-
-                    </section>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Offline -->
-    <div class="fixed-top" id="offline-mode" style="opacity: 0; z-index: 1057;"></div>
-
-    <!-- Modal login -->
-    <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4">
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="loginEmail" class="form-label"><i class="fa-solid fa-envelope me-1"></i>Email</label>
-                            <input type="email" class="form-control shadow-sm rounded-4" id="loginEmail" placeholder="Masukkan email Anda" required autocomplete="email" autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label"><i class="fa-solid fa-lock me-1"></i>Password</label>
-                            <input type="password" class="form-control shadow-sm rounded-4" id="loginPassword" placeholder="Masukkan password Anda" required autocomplete="current-password">
-                        </div>
-                        <div class="alert alert-danger d-none py-2 rounded-4" id="loginError" role="alert" style="font-size: 0.9rem;"></div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary shadow-sm rounded-4" onclick="admin.login(this)"><i class="fa-solid fa-right-to-bracket me-1"></i>Login</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                <p class="login-error" id="loginError" hidden></p>
+                <button type="submit" class="btn-green btn-block" id="loginBtn">Login</button>
+            </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha256-CDOy6cOibCWEdsRiZuaHf8dSGGJRYuBGC+mjoJimHGw=" crossorigin="anonymous"></script>
-    <script src="./js/dashboard.js" type="module"></script>
-</body>
+    <!-- App -->
+    <div id="appShell" class="app" hidden>
+        <aside class="sidebar">
+            <div class="wordmark">Wedify<span>.</span></div>
+            <nav class="sidenav" id="sideNav">
+                <button class="navbtn active" data-view="beranda"><span class="nav-ic" data-ic="home"></span>Beranda</button>
+                <button class="navbtn" data-view="musik"><span class="nav-ic" data-ic="music"></span>Musik</button>
+                <button class="navbtn" data-view="tamu"><span class="nav-ic" data-ic="users"></span>Tamu</button>
+                <button class="navbtn" data-view="komentar"><span class="nav-ic" data-ic="chat"></span>Komentar</button>
+                <button class="navbtn" data-view="pengaturan"><span class="nav-ic" data-ic="gear"></span>Pengaturan</button>
+            </nav>
+            <div class="side-foot">
+                <button class="navbtn" id="sideLogout"><span class="nav-ic" data-ic="logout"></span>Logout</button>
+            </div>
+        </aside>
 
+        <main class="main">
+            <header class="topbar">
+                <span class="topbar-wordmark">Wedify<span>.</span></span>
+                <span class="topbar-name" id="dashboard-name">Memuat...</span>
+            </header>
+
+            <!-- Beranda -->
+            <section class="view active" id="view-beranda">
+                <div class="album-head">
+                    <img class="album-cover" id="albumCover" src="/assets/images/album.webp" alt="Cover album">
+                    <div class="album-info">
+                        <h1 id="albumTitle">USRA &amp; ZEE</h1>
+                        <p class="muted" id="albumSubtitle">The Wedding Album</p>
+                        <div class="rowbtns">
+                            <button class="btn-green" id="btnViewSite">Lihat situs</button>
+                            <button class="btn-ghost" id="btnGoGuest">Buat link tamu</button>
+                            <button class="btn-ghost" id="btnDownload">Unduh CSV</button>
+                        </div>
+                    </div>
+                </div>
+                <h2>Statistik</h2>
+                <div class="stats">
+                    <div class="stat"><div class="num" id="count-comment">0</div><div class="lbl">Komentar</div></div>
+                    <div class="stat"><div class="num" id="count-present">0</div><div class="lbl">Hadir</div></div>
+                    <div class="stat"><div class="num" id="count-absent">0</div><div class="lbl">Berhalangan</div></div>
+                    <div class="stat"><div class="num" id="count-unsure">0</div><div class="lbl">Masih Ragu</div></div>
+                    <div class="stat"><div class="num" id="count-like">0</div><div class="lbl">Suka</div></div>
+                    <div class="stat"><div class="num" id="count-follow-groom">0</div><div class="lbl">Penggemar Usra</div></div>
+                    <div class="stat"><div class="num" id="count-follow-bride">0</div><div class="lbl">Penggemar Zee</div></div>
+                </div>
+                <h2>Tracklist acara</h2>
+                <div class="track"><span class="no">1</span><span class="nm" id="track1Name">Akad Nikah</span><span class="tm" id="track1Time">10.00 WIB</span></div>
+                <div class="track"><span class="no">2</span><span class="nm" id="track2Name">Resepsi</span><span class="tm" id="track2Time">13.00 WIB</span></div>
+                <p class="venue" id="venueLine">Jam Gadang, Bukittinggi</p>
+            </section>
+
+            <!-- Musik (editor konten) -->
+            <section class="view" id="view-musik">
+                <h1>Edit album</h1>
+                <p class="sub">Semua teks, foto, musik, jadwal, dan rekening di halaman undangan diatur dari sini. Simpan, lalu buka halaman undangan untuk melihat hasilnya.</p>
+                <details class="group" open>
+                    <summary>Detail album</summary>
+                    <div class="group-body">
+                        <div class="field"><label for="site-album_title">Judul album</label><input type="text" id="site-album_title"></div>
+                        <div class="field"><label for="site-album_subtitle">Subjudul album</label><input type="text" id="site-album_subtitle"></div>
+                        <div class="field"><label for="site-album_art">Cover album (URL/path)</label><input type="text" id="site-album_art"><div class="upload-row" data-upload="album_art" data-kind="image"></div></div>
+                        <div class="field"><label for="site-music_title">Judul lagu</label><input type="text" id="site-music_title"></div>
+                        <div class="field"><label for="site-music_artist">Artis lagu</label><input type="text" id="site-music_artist"></div>
+                        <div class="field"><label for="site-music_url">File musik (URL/path)</label><input type="text" id="site-music_url"><div class="upload-row" data-upload="music_url" data-kind="audio"></div></div>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary>Mempelai</summary>
+                    <div class="group-body">
+                        <div class="field"><label for="site-groom_name">Nama lengkap pria</label><input type="text" id="site-groom_name"></div>
+                        <div class="field"><label for="site-groom_short">Nama panggilan pria</label><input type="text" id="site-groom_short"></div>
+                        <div class="field"><label for="site-groom_parents">Orang tua pria</label><input type="text" id="site-groom_parents"></div>
+                        <div class="field"><label for="site-groom_listeners">Pendengar bulanan pria (teks)</label><input type="text" id="site-groom_listeners"></div>
+                        <div class="field"><label for="site-groom_photo">Foto pria (URL/path)</label><input type="text" id="site-groom_photo"><div class="upload-row" data-upload="groom_photo" data-kind="image"></div></div>
+                        <div class="field"><label for="site-bride_name">Nama lengkap wanita</label><input type="text" id="site-bride_name"></div>
+                        <div class="field"><label for="site-bride_short">Nama panggilan wanita</label><input type="text" id="site-bride_short"></div>
+                        <div class="field"><label for="site-bride_parents">Orang tua wanita</label><input type="text" id="site-bride_parents"></div>
+                        <div class="field"><label for="site-bride_listeners">Pendengar bulanan wanita (teks)</label><input type="text" id="site-bride_listeners"></div>
+                        <div class="field"><label for="site-bride_photo">Foto wanita (URL/path)</label><input type="text" id="site-bride_photo"><div class="upload-row" data-upload="bride_photo" data-kind="image"></div></div>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary>Tracklist acara</summary>
+                    <div class="group-body">
+                        <div class="field"><label for="site-wedding_iso">Tanggal &amp; jam (ISO)</label><input type="text" id="site-wedding_iso"><small class="hint">Format: 2050-01-17T10:00:00+07:00, untuk countdown</small></div>
+                        <div class="field"><label for="site-date_label">Label tanggal</label><input type="text" id="site-date_label"></div>
+                        <div class="field"><label for="site-akad_time">Jam akad</label><input type="text" id="site-akad_time"></div>
+                        <div class="field"><label for="site-akad_desc">Judul track 1</label><input type="text" id="site-akad_desc"></div>
+                        <div class="field"><label for="site-resepsi_time">Jam resepsi</label><input type="text" id="site-resepsi_time"></div>
+                        <div class="field"><label for="site-resepsi_desc">Judul track 2</label><input type="text" id="site-resepsi_desc"></div>
+                        <div class="field"><label for="site-venue_name">Nama venue</label><input type="text" id="site-venue_name"></div>
+                        <div class="field"><label for="site-venue_address">Alamat venue</label><input type="text" id="site-venue_address"></div>
+                        <div class="field"><label for="site-maps_url">Link Google Maps</label><input type="text" id="site-maps_url"></div>
+                        <div class="field"><label for="site-cal_start">Kalender mulai (UTC)</label><input type="text" id="site-cal_start"><small class="hint">Format: 20500117T030000Z</small></div>
+                        <div class="field"><label for="site-cal_end">Kalender selesai (UTC)</label><input type="text" id="site-cal_end"><small class="hint">Format: 20500117T040000Z</small></div>
+                        <div class="field"><label for="site-dress_1">Dress code 1</label><input type="text" id="site-dress_1"></div>
+                        <div class="field"><label for="site-dress_2">Dress code 2</label><input type="text" id="site-dress_2"></div>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary>Lirik &amp; Wrapped</summary>
+                    <div class="group-body">
+                        <div class="field"><label for="site-lyrics_text">Teks lirik/ayat</label><textarea id="site-lyrics_text" rows="4"></textarea></div>
+                        <div class="field"><label for="site-lyrics_source">Sumber ayat</label><input type="text" id="site-lyrics_source"></div>
+                        <div class="field"><label for="site-wrapped_match">Wrapped: match</label><input type="text" id="site-wrapped_match"></div>
+                        <div class="field"><label for="site-wrapped_genre">Wrapped: genre</label><input type="text" id="site-wrapped_genre"></div>
+                        <div class="field"><label for="site-wrapped_collab">Wrapped: kolaborasi</label><input type="text" id="site-wrapped_collab"></div>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary>Love Gift</summary>
+                    <div class="group-body">
+                        <div class="field"><label for="site-gift1_bank">Gift 1: bank/e-wallet</label><input type="text" id="site-gift1_bank"></div>
+                        <div class="field"><label for="site-gift1_number">Gift 1: nomor</label><input type="text" id="site-gift1_number"></div>
+                        <div class="field"><label for="site-gift1_owner">Gift 1: atas nama</label><input type="text" id="site-gift1_owner"></div>
+                        <div class="field"><label for="site-gift2_bank">Gift 2: bank/e-wallet</label><input type="text" id="site-gift2_bank"></div>
+                        <div class="field"><label for="site-gift2_number">Gift 2: nomor</label><input type="text" id="site-gift2_number"></div>
+                        <div class="field"><label for="site-gift2_owner">Gift 2: atas nama</label><input type="text" id="site-gift2_owner"></div>
+                    </div>
+                </details>
+                <details class="group">
+                    <summary>Galeri &amp; Bagikan</summary>
+                    <div class="group-body">
+                        <div class="field"><label for="site-gallery_urls">URL foto galeri</label><textarea id="site-gallery_urls" rows="4"></textarea><small class="hint">Satu URL per baris</small><div class="upload-row" data-upload="gallery_urls" data-kind="gallery"></div></div>
+                        <div class="field"><label for="site-share_text">Teks tombol bagikan</label><input type="text" id="site-share_text"></div>
+                    </div>
+                </details>
+                <div class="save-bar">
+                    <button class="btn-green" id="btnSaveSite" data-offline>Simpan Konten</button>
+                </div>
+            </section>
+
+            <!-- Tamu -->
+            <section class="view" id="view-tamu">
+                <h1>Buat Link Undangan</h1>
+                <p class="sub">Link dibuat untuk satu tamu, lalu bisa dikirim lewat WhatsApp atau disimpan.</p>
+                <div class="field"><label for="guest-name">Nama Tamu</label><input type="text" id="guest-name" placeholder="cth: Bapak Budi Sekeluarga" data-offline></div>
+                <div class="field"><label for="guest-phone">No. WhatsApp (opsional, buat kirim langsung)</label><input type="tel" id="guest-phone" placeholder="cth: 081234567890" data-offline></div>
+                <div class="preview">Link: <b id="guest-link-preview">https://wedify.xsrazy.web.id/?to=Nama+Tamu</b></div>
+                <div class="rowbtns">
+                    <a class="btn-green btn-link" id="guest-wa-button" target="_blank" rel="noopener" href="#">Kirim via WhatsApp</a>
+                    <button class="btn-ghost" id="guest-copy-button" data-copy="" data-offline>Salin Link</button>
+                    <button class="btn-ghost" id="guest-add-button" data-offline>Simpan Tamu</button>
+                </div>
+                <h2>Daftar Tamu Tersimpan</h2>
+                <div id="guest-list"><p class="empty">Memuat...</p></div>
+            </section>
+
+            <!-- Komentar -->
+            <section class="view" id="view-komentar">
+                <h1>Komentar</h1>
+                <p class="sub">Komentar tamu di undangan. Balas, edit, hapus, dan sematkan dari sini.</p>
+                <div class="card">
+                    <div class="field"><label for="form-comment">Tulis komentar sebagai admin</label><textarea id="form-comment" rows="3" placeholder="Tulis komentar..." data-offline></textarea></div>
+                    <div class="field"><label for="form-presence">Status kehadiran</label>
+                        <select id="form-presence" data-offline>
+                            <option value="1">Datang</option>
+                            <option value="2">Berhalangan</option>
+                            <option value="3">Masih Ragu</option>
+                        </select>
+                    </div>
+                    <div class="rowbtns"><button class="btn-green" id="btnSendComment" data-offline>Kirim</button></div>
+                </div>
+                <div id="comments"><p class="empty">Memuat...</p></div>
+                <div class="pager" id="pagination">
+                    <button class="btn-ghost" id="btnPrev" disabled data-offline>Sebelumnya</button>
+                    <span class="pager-page">Halaman <b id="page">1</b></span>
+                    <button class="btn-ghost" id="btnNext" data-offline>Berikutnya</button>
+                </div>
+            </section>
+
+            <!-- Pengaturan -->
+            <section class="view" id="view-pengaturan">
+                <h1>Pengaturan</h1>
+                <p class="sub">Akun admin dashboard.</p>
+                <div class="card">
+                    <div class="field"><label>Email</label><p class="static" id="dashboard-email">Memuat...</p></div>
+                    <div class="field"><label for="form-name">Nama tampilan</label><input type="text" id="form-name" data-offline></div>
+                    <div class="rowbtns"><button class="btn-green" id="btnChangeName" disabled data-offline>Ubah Nama</button></div>
+                </div>
+                <div class="card">
+                    <h2 class="card-title">Kunci akses tamu</h2>
+                    <p class="note">Kunci ini dipakai API untuk mengenali tamu di halaman undangan. Kunci ini bukan password admin. Kalau kunci dirotasi, kunci lama langsung tidak berlaku, tapi halaman undangan mengambil kunci baru otomatis dari server, jadi tamu tidak perlu link baru.</p>
+                    <div class="field"><label for="dashboard-accesskey">Kunci akses</label>
+                        <div class="input-row">
+                            <input type="text" id="dashboard-accesskey" readonly>
+                            <button class="btn-ghost" id="btnCopyKey" data-copy="" data-offline>Salin</button>
+                        </div>
+                    </div>
+                    <div class="rowbtns"><button class="btn-ghost" id="btnRegenerate" data-offline>Rotasi Kunci</button></div>
+                </div>
+                <div class="card">
+                    <h2 class="card-title">Kontrol komentar</h2>
+                    <label class="switch-row"><span>Filter kata kasar</span><input type="checkbox" id="filterBadWord" data-offline><span class="switch"></span></label>
+                    <label class="switch-row"><span>Tamu boleh membalas komentar</span><input type="checkbox" id="replyComment" data-offline><span class="switch"></span></label>
+                    <label class="switch-row"><span>Tamu boleh mengedit komentarnya</span><input type="checkbox" id="editComment" data-offline><span class="switch"></span></label>
+                    <label class="switch-row"><span>Tamu boleh menghapus komentarnya</span><input type="checkbox" id="deleteComment" data-offline><span class="switch"></span></label>
+                </div>
+                <div class="card">
+                    <h2 class="card-title">Ganti password</h2>
+                    <div class="field"><label for="old_password">Password lama</label><input type="password" id="old_password" autocomplete="current-password" data-offline></div>
+                    <div class="field"><label for="new_password">Password baru</label><input type="password" id="new_password" autocomplete="new-password" data-offline></div>
+                    <div class="rowbtns"><button class="btn-green" id="btnChangePassword" disabled data-offline>Ubah Password</button></div>
+                </div>
+                <div class="card">
+                    <div class="rowbtns"><button class="btn-danger" id="btnLogout">Logout</button></div>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottomnav" id="bottomNav">
+            <button class="navbtn active" data-view="beranda"><span class="nav-ic" data-ic="home"></span>Beranda</button>
+            <button class="navbtn" data-view="musik"><span class="nav-ic" data-ic="music"></span>Musik</button>
+            <button class="navbtn" data-view="tamu"><span class="nav-ic" data-ic="users"></span>Tamu</button>
+            <button class="navbtn" data-view="komentar"><span class="nav-ic" data-ic="chat"></span>Komentar</button>
+            <button class="navbtn" data-view="pengaturan"><span class="nav-ic" data-ic="gear"></span>Pengaturan</button>
+        </nav>
+    </div>
+
+    <div class="offline-banner" id="offlineBanner" hidden>Koneksi tidak tersedia, tombol dinonaktifkan.</div>
+    <div class="toast" id="toast"></div>
+    <script type="module" src="./js/dash.js"></script>
+</body>
 </html>

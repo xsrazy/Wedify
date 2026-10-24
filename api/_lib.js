@@ -481,6 +481,7 @@ const toPublic = (comment, byParent, isAdmin) => {
         created_at: formatDate(comment.created_at),
         comments: replies,
         like: { love: (comment.likes || []).length },
+        pinned: Boolean(comment.pinned),
     };
     if (isAdmin) {
         out.own = comment.own;

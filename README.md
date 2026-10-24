@@ -13,7 +13,7 @@ Dashboard: https://wedify.xsrazy.web.id/dashboard
 
 Wedify turns a wedding invitation into a music album experience. Guests open the invitation from an album cover screen personalized with their name, press the big green Play button, and the invitation starts together with its soundtrack. The whole page is styled like a streaming app: a Now Playing header, a real working player bar, a tracklist for the schedule, artist profiles for the couple with real Follow buttons, a Wrapped-style stats section, a lyrics card for a sacred verse, a merch section for love gifts, and a comment-style guestbook.
 
-Unlike a static template, Wedify ships with its own backend and admin dashboard. The couple logs in and edits everything (names, photos, music, schedule, venue, gift accounts, gallery, the verse) from a form; changes go live for every guest immediately. Follows and wishes are stored in a real database, and the dashboard shows live statistics, comment moderation, a guest list with personalized link generation, and a CSV export.
+Unlike a static template, Wedify ships with its own backend and admin dashboard. The couple logs in and edits everything (names, photos, music, schedule, venue, gift accounts, gallery, the verse) from a grouped Edit album editor; changes go live for every guest immediately. Follows and wishes are stored in a real database, and the dashboard shows live statistics, comment moderation, a guest list with personalized link generation, and a CSV export.
 
 The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Gadang, Bukittinggi). Replace it from the dashboard, no code changes needed.
 
@@ -31,11 +31,12 @@ The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Ga
 - Photo gallery fed from the dashboard settings
 - Love Gift as "Exclusive Merch": bank/e-wallet cards with masked numbers and copy-to-clipboard buttons
 - RSVP + guestbook stored server-side, with attendance badges
-- Admin dashboard (`/dashboard`):
-  - Home: live statistics (comments, likes, present, absent, followers per artist), comment moderation, CSV download
-  - Konten Web: one form for all site content (couple, album, music, schedule, venue, dress code, verse, Wrapped texts, gift accounts, gallery, share text)
+- Admin dashboard (`/dashboard`, Spotify for Artists style):
+  - Beranda: album header, live statistics (comments, likes, present, absent, unsure, followers per artist), quick actions, CSV download
+  - Musik: Edit album with grouped sections for all site content (couple, album, music, schedule, venue, dress code, verse, Wrapped texts, gift accounts, gallery, share text) plus media uploads
   - Tamu: guest list that generates personalized invitation links and WhatsApp share links
-  - Setting: admin name, change password, guest access key regeneration, comment toggles (replies, editing, deletion, bad-word filter)
+  - Komentar: fan comment feed with reply, edit, delete, and pinned comments (one pinned comment, set from the dashboard, shown first with a badge)
+  - Pengaturan: admin name, change password, guest access key regeneration, comment toggles (replies, editing, deletion, bad-word filter)
 - Full SEO: meta description and keywords, Open Graph and Twitter cards with a dedicated OG image, canonical URL, JSON-LD, robots.txt, sitemap.xml, favicon set
 - Every `*.vercel.app` URL permanently redirects to the canonical domain
 - Mobile-first single-column app layout, no build step, no framework
@@ -54,7 +55,7 @@ The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Ga
   - `GET /api/download` — comments CSV export (formula-injection safe)
   - `GET/POST /api/guest`, `DELETE /api/guest/:id` — saved guest list for personalized links
 - Database: one versioned JSON document in a private Vercel Blob store. Writes are serialized with optimistic concurrency; the newest version always wins, so a stale copy can never shadow fresh data. Passwords are scrypt-hashed; a bad-word filter, per-IP rate limits, and strict presence parsing are built in.
-- Dashboard: `dashboard.html` with Bootstrap 5 and modular vanilla JS in `js/` (session, comments, guests, site editor). The Konten Web tab is Wedify's addition on top of the dashboard pattern.
+- Dashboard: `dashboard.html` with custom Spotify for Artists-style CSS (`css/dashboard.css`) and vanilla JS (`js/dash.js` + `js/dash-api.js`). No framework, no CDN, no Bootstrap.
 - Hosting: Vercel (static files + Functions + Blob). `vercel.json` enables clean URLs and redirects every `*.vercel.app` host to the canonical domain.
 
 ## Setup (forks)
@@ -67,15 +68,15 @@ The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Ga
    - `ADMIN_EMAIL` — the dashboard login email
    - `ADMIN_PASSWORD` — the initial dashboard password (change it after the first login)
    - `INITIAL_ACCESS_KEY` — the initial guest access key embedded via `/api/config`
-4. Deploy, open `/dashboard`, log in, and fill in the Konten Web form. The database document is created automatically on first use with demo content.
+4. Deploy, open `/dashboard`, log in, and fill in the Musik (Edit album) editor. The database document is created automatically on first use with demo content.
 
 ## Customization
 
-Almost everything is edited from the dashboard (Konten Web tab): couple names and parents, album artwork and photos (uploaded files or URLs), soundtrack file, wedding date and countdown target, schedule, venue, maps link, calendar times, dress code, the verse, Wrapped texts, gift accounts, gallery images (one URL per line), and the share text. Code changes are only needed for layout or entirely new sections; the fallback demo content lives at the top of `js/app.js` and the database seed defaults in `api/_lib.js`.
+Almost everything is edited from the dashboard (Musik view): couple names and parents, album artwork and photos (uploaded files or URLs), soundtrack file, wedding date and countdown target, schedule, venue, maps link, calendar times, dress code, the verse, Wrapped texts, gift accounts, gallery images (one URL per line), and the share text. Code changes are only needed for layout or entirely new sections; the fallback demo content lives at the top of `js/app.js` and the database seed defaults in `api/_lib.js`.
 
 ## Media guide
 
-Sizes and limits for everything editable in the Konten Web tab. The same fields also accept a pasted URL or path instead of an upload.
+Sizes and limits for everything editable in the Musik editor. The same fields also accept a pasted URL or path instead of an upload.
 
 | Slot | Where it appears | Recommended size | Formats |
 | --- | --- | --- | --- |

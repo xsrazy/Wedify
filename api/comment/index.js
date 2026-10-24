@@ -21,6 +21,9 @@ module.exports = async (req, res) => {
             const per = Math.max(1, Math.min(100, parseInt(req.query.per, 10) || 10));
             const next = Math.max(0, parseInt(req.query.next, 10) || 0);
             const { roots, byParent } = buildTree(db.comments);
+            // The pinned comment (at most one, enforced on PUT) always
+            // leads the list, then the usual newest-first order (stable).
+            roots.sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
             const page = roots.slice(next, next + per).map((c) => toPublic(c, byParent, isAdmin));
             return send(res, 200, page);
         }

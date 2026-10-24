@@ -27,6 +27,7 @@ module.exports = async (req, res) => {
                 comment: comment.comment,
                 is_admin: comment.is_admin,
                 created_at: formatDate(comment.created_at),
+                pinned: Boolean(comment.pinned),
             });
         }
 
@@ -120,15 +121,40 @@ module.exports = async (req, res) => {
                     if (body.presence !== null && body.presence !== undefined) {
                         newPresence = parsePresence(body.presence);
                     }
+                    // Pinned comments: admin-only, root comments only, and
+                    // at most one pinned comment at a time. A pin change
+                    // counts as a real change for the no-change check below.
+                    let pinChange = null;
+                    if (body.pinned !== null && body.pinned !== undefined) {
+                        if (typeof body.pinned !== 'boolean') {
+                            throw httpError(400, 'Nilai pin tidak valid.');
+                        }
+                        if (!isAdmin) {
+                            throw httpError(403, 'Hanya admin yang bisa menyematkan komentar.');
+                        }
+                        if (target.parent) {
+                            throw httpError(400, 'Hanya komentar utama yang bisa disematkan.');
+                        }
+                        pinChange = body.pinned;
+                    }
                     // A request that changes nothing is a client error, not
                     // a silent success (audit fix). This also covers the
                     // malformed-body-swallowed-to-{} case above.
-                    if (text === target.comment && (newPresence === null || newPresence === target.presence)) {
+                    if (text === target.comment && (newPresence === null || newPresence === target.presence) &&
+                        (pinChange === null || pinChange === Boolean(target.pinned))) {
                         throw httpError(400, 'Tidak ada perubahan.');
                     }
                     target.comment = text;
                     if (newPresence !== null) {
                         target.presence = newPresence;
+                    }
+                    if (pinChange !== null) {
+                        if (pinChange) {
+                            for (const c of db.comments) {
+                                c.pinned = false;
+                            }
+                        }
+                        target.pinned = pinChange;
                     }
                     return true;
                 }
