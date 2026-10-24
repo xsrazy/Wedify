@@ -142,6 +142,11 @@ const getUserDetail = async () => {
     if (!res.ok) {
         if (res.code === 401 || res.code === 403) {
             logout('Sesi berakhir, silakan login lagi.');
+        } else {
+            // Non-auth boot failure (audit fix m4): do not leave a blank
+            // app shell with "Memuat..." labels and no error. Back to the
+            // login screen with a message; the user can retry from there.
+            logout('Gagal memuat data. Silakan coba login lagi.');
         }
         return false;
     }
@@ -206,7 +211,11 @@ $('btnSaveSite').addEventListener('click', async () => {
     const res = await api('PATCH', '/api/user', { site: payload });
     btn.disabled = false;
     if (res.ok) {
+        // Fill from what the server actually stored (audit fix m2):
+        // over-long fields are skipped server-side, so the form must
+        // show stored values, not the submitted ones.
         siteData = res.data.site || payload;
+        fillSite();
         fillBeranda();
         toast('Konten tersimpan');
     } else {
@@ -286,7 +295,11 @@ document.querySelectorAll('.upload-row').forEach((row) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.hidden = true;
-    input.accept = kind === 'audio' ? 'audio/*' : 'image/*';
+    // Audio picker matches the server whitelist (audit fix m7): the
+    // server accepts only mp3/ogg/m4a/aac, so wav/flac must not be
+    // pickable in the first place. Images are converted to webp in the
+    // browser, so image/* stays fine there.
+    input.accept = kind === 'audio' ? 'audio/mpeg,audio/mp3,audio/ogg,audio/mp4,audio/x-m4a,audio/aac' : 'image/*';
     input.multiple = kind === 'gallery';
     row.append(btn, status, input);
     btn.addEventListener('click', () => input.click());
@@ -508,6 +521,12 @@ const commentsLoad = async (next) => {
 $('btnPrev').addEventListener('click', () => commentsLoad(Math.max(0, commentPage - PER)));
 $('btnNext').addEventListener('click', () => commentsLoad(commentPage + PER));
 $('btnSendComment').addEventListener('click', async () => {
+    // Guard against a null userInfo (audit fix m4): without it the
+    // handler throws after disabling the button and it stays stuck.
+    if (!userInfo) {
+        toast('Data admin belum dimuat, muat ulang halaman.');
+        return;
+    }
     const text = $('form-comment').value.trim();
     if (text.length === 0) {
         toast('Komentar tidak boleh kosong');
@@ -588,6 +607,11 @@ $('comments').addEventListener('click', async (e) => {
         const text = form.querySelector('textarea').value.trim();
         if (text.length === 0) {
             toast('Balasan tidak boleh kosong');
+            return;
+        }
+        // Same null-userInfo guard as the main composer (audit fix m4).
+        if (!userInfo) {
+            toast('Data admin belum dimuat, muat ulang halaman.');
             return;
         }
         const res = await api('POST', '/api/comment', {
@@ -749,16 +773,23 @@ $('btnChangePassword').addEventListener('click', async () => {
     btn.disabled = true;
     const res = await api('PATCH', '/api/user', { old_password, new_password });
     btn.disabled = false;
-    if (res.ok) {
+    // Success ONLY when HTTP ok AND the server status is not false
+    // (audit fix M1): a wrong old password must never log the admin out
+    // with a false "Password diubah" message.
+    if (res.ok && res.data && res.data.status !== false) {
         // Token lama ikut hangus (token_version naik): logout bersih.
         logout('Password diubah. Silakan login lagi dengan password baru.');
         toast('Password diubah. Silakan login lagi.');
     } else {
-        toast(res.message || 'Gagal mengubah password');
+        toast(res.message || 'Password lama salah');
     }
 });
-const doLogout = () => {
+const doLogout = async () => {
     if (confirm('Yakin mau logout?')) {
+        // Best-effort server-side revoke (audit fix): the token is
+        // invalidated via DELETE /api/session, but local discard happens
+        // even if that call fails (offline, transient error).
+        await api('DELETE', '/api/session');
         logout();
     }
 };

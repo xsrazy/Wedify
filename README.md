@@ -48,7 +48,7 @@ The demo data is a fictional sample wedding (Usra & Zee, 17 January 2050, Jam Ga
   - `GET /api/config` — public site content + guest access key + follow counts and the visitor's own follow state
   - `GET/POST /api/comment`, `GET/POST/PATCH/PUT/DELETE /api/comment/:id` — guestbook with replies, likes, owner-token editing, moderation
   - `POST /api/follow` — toggles a follow for `groom` or `bride` (one per visitor IP)
-  - `POST /api/session` — admin login (JWT, 7 days, token-version revocation on password change)
+  - `POST/DELETE /api/session` — admin login (JWT, 7 days, token-version revocation on password change or logout)
   - `GET/PATCH /api/user` — admin profile, settings, and the site content (whitelist-validated merge)
   - `PUT /api/key` — regenerate the guest access key
   - `GET /api/stats` — dashboard statistics

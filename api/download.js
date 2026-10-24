@@ -3,9 +3,11 @@ const { loadDB, getAuth, sendError, fail, formatDate } = require('./_lib');
 // Quote a CSV cell and neutralize spreadsheet formulas (audit fix): a
 // leading =, +, -, @, tab or CR would otherwise be evaluated by Excel /
 // Sheets even inside quotes, and names/comments are guest-controlled.
+// The check runs on the whitespace-trimmed value (audit fix): a formula
+// smuggled behind leading spaces or a newline must not slip through.
 const csvCell = (value) => {
     let s = String(value ?? '');
-    if (/^[=+\-@\t\r]/.test(s)) {
+    if (/^[=+\-@\t\r]/.test(s.trimStart())) {
         s = `'${s}`;
     }
     return `"${s.replace(/"/g, '""')}"`;
@@ -21,7 +23,7 @@ module.exports = async (req, res) => {
         if (!auth || !auth.admin) {
             return sendError(res, 401, 'Unauthorized');
         }
-        const rows = [['uuid', 'parent', 'name', 'presence', 'comment', 'likes', 'is_admin', 'ip', 'user_agent', 'created_at']];
+        const rows = [['uuid', 'parent', 'name', 'presence', 'comment', 'likes', 'is_admin', 'ip', 'user_agent', 'created_at', 'pinned']];
         // Include replies as their own rows (audit fix: the old export
         // silently dropped every nested comment). Parents come before
         // their replies; siblings are ordered by creation time.
@@ -40,7 +42,7 @@ module.exports = async (req, res) => {
             for (const c of siblings) {
                 rows.push([c.uuid, c.parent || '', c.name, c.presence === 'ragu' ? 'Masih Ragu' : c.presence ? 'Datang' : 'Berhalangan',
                     c.comment, (c.likes || []).length, c.is_admin ? '1' : '0', c.ip || '',
-                    c.user_agent || '', formatDate(c.created_at)]);
+                    c.user_agent || '', formatDate(c.created_at), c.pinned ? '1' : '0']);
                 walk(c.uuid);
             }
         };

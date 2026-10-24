@@ -1,7 +1,8 @@
 const crypto = require('crypto');
 const {
     loadDB, withDB, noSave, getAuth, send, sendError, fail, httpError, readBody, clientIp,
-    filterBadWords, parsePresence, findComment, findByOwn, removeSubtree, formatDate,
+    rateLimit, filterBadWords, parsePresence, toPublic, buildTree,
+    findComment, findByOwn, removeSubtree,
 } = require('../_lib');
 
 const MAX_COMMENT = 3000;
@@ -21,14 +22,10 @@ module.exports = async (req, res) => {
             if (!comment) {
                 return sendError(res, 404, 'Komentar tidak ditemukan.');
             }
-            return send(res, 200, {
-                name: comment.name,
-                presence: comment.presence,
-                comment: comment.comment,
-                is_admin: comment.is_admin,
-                created_at: formatDate(comment.created_at),
-                pinned: Boolean(comment.pinned),
-            });
+            // One shared serializer (audit fix): same shape as the list,
+            // including pinned, like, and (for admins) own/ip/user_agent.
+            const { byParent } = buildTree(db.comments);
+            return send(res, 200, toPublic(comment, byParent, Boolean(auth.admin)));
         }
 
         // Like a comment. The id is the comment's public uuid. One like per
@@ -36,6 +33,16 @@ module.exports = async (req, res) => {
         // like instead of inflating the count.
         if (req.method === 'POST') {
             const ip = clientIp(req);
+            // Auth first, then the guest rate limit once (audit fix):
+            // never inside the mutator, where retries would burn quota.
+            const preDb = await loadDB();
+            const preAuth = getAuth(req, preDb);
+            if (!preAuth) {
+                return sendError(res, 401, 'Invalid access key');
+            }
+            if (!preAuth.admin && !rateLimit(`like:${ip}`, 20, 60 * 1000)) {
+                return sendError(res, 429, 'Terlalu banyak like. Coba lagi nanti.');
+            }
             const likeUuid = await withDB(async (db) => {
                 const auth = getAuth(req, db);
                 if (!auth) {
@@ -69,14 +76,29 @@ module.exports = async (req, res) => {
 
         // Unlike. The id is the like uuid returned when liking.
         if (req.method === 'PATCH') {
+            const ip = clientIp(req);
+            const preDb = await loadDB();
+            const preAuth = getAuth(req, preDb);
+            if (!preAuth) {
+                return sendError(res, 401, 'Invalid access key');
+            }
+            if (!preAuth.admin && !rateLimit(`like:${ip}`, 20, 60 * 1000)) {
+                return sendError(res, 429, 'Terlalu banyak like. Coba lagi nanti.');
+            }
             const removed = await withDB(async (db) => {
                 const auth = getAuth(req, db);
                 if (!auth) {
                     return noSave(null);
                 }
+                const isAdmin = Boolean(auth.admin);
                 for (const comment of db.comments) {
                     const idx = (comment.likes || []).findIndex((l) => l.uuid === id);
                     if (idx >= 0) {
+                        // Ownership check (audit fix m6): only the liker
+                        // (same IP) or an admin may remove a like.
+                        if (!isAdmin && comment.likes[idx].ip !== ip) {
+                            return noSave(false);
+                        }
                         comment.likes.splice(idx, 1);
                         return true;
                     }
@@ -90,6 +112,12 @@ module.exports = async (req, res) => {
         }
 
         if (req.method === 'PUT' || req.method === 'DELETE') {
+            // Auth first (audit fix): unauthenticated requests get 401
+            // before any body parsing runs.
+            const preDb = await loadDB();
+            if (!getAuth(req, preDb)) {
+                return sendError(res, 401, 'Invalid access key');
+            }
             const body = req.method === 'PUT' || req.method === 'DELETE' ? await readBody(req).catch(() => ({})) : {};
             const status = await withDB(async (db) => {
                 const auth = getAuth(req, db);
@@ -120,6 +148,12 @@ module.exports = async (req, res) => {
                     let newPresence = null;
                     if (body.presence !== null && body.presence !== undefined) {
                         newPresence = parsePresence(body.presence);
+                        // Audit fix m1: an invalid presence must be a 400,
+                        // not a silently dropped change (or a misleading
+                        // "no change" error when nothing else changed).
+                        if (newPresence === null) {
+                            throw httpError(400, 'Konfirmasi kehadiran tidak valid.');
+                        }
                     }
                     // Pinned comments: admin-only, root comments only, and
                     // at most one pinned comment at a time. A pin change

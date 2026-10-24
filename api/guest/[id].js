@@ -13,6 +13,13 @@ module.exports = async (req, res) => {
         }
         const id = req.query.id;
         const status = await withDB(async (fresh) => {
+            // Re-check auth inside withDB (audit fix): the outer check
+            // runs against a possibly stale snapshot, so a token revoked
+            // between the check and the save must not still delete.
+            const innerAuth = getAuth(req, fresh);
+            if (!innerAuth || !innerAuth.admin) {
+                return noSave(false);
+            }
             const before = fresh.guests.length;
             fresh.guests = fresh.guests.filter((g) => g.id !== id);
             if (fresh.guests.length === before) {
@@ -20,6 +27,9 @@ module.exports = async (req, res) => {
             }
             return true;
         });
+        if (status === false) {
+            return sendError(res, 401, 'Unauthorized');
+        }
         return send(res, 200, { status });
     } catch (err) {
         return fail(res, err);

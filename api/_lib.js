@@ -108,8 +108,9 @@ const defaultDB = () => ({
 async function loadDBVersioned() {
     const versions = await blobListVersions();
     if (versions.length === 0) {
-        return { db: defaultDB(), version: null };
+        return { db: defaultDB(), version: null, newestCorrupt: null };
     }
+    const newestPathname = versions[0].pathname;
     let lastErr = null;
     for (const blob of versions.slice(0, 3)) {
         try {
@@ -135,7 +136,10 @@ async function loadDBVersioned() {
             } else {
                 db.settings.site = { ...defaultSite(), ...db.settings.site };
             }
-            return { db, version: blob.pathname };
+            // If the newest version was unreadable and we fell back to an
+            // older one, report the corrupt newest pathname so withDB can
+            // supersede it instead of looping to 409 forever (audit fix).
+            return { db, version: blob.pathname, newestCorrupt: blob.pathname === newestPathname ? null : newestPathname };
         } catch (err) {
             lastErr = err;
         }
@@ -201,16 +205,26 @@ const saveDB = async (db) => {
 // fresh version instead of silently overwriting it. The mutator must be
 // re-runnable (it may run more than once) and returns either its result or
 // noSave(value) to finish without writing.
+// Corrupt-newest case (audit fix): if the load fell back to an older
+// version because the newest is unreadable, the write may supersede that
+// corrupt newest version, but ONLY if no newer version appeared since
+// the load (a newer version means another writer saved meanwhile, so we
+// retry on the fresh state instead of overwriting it).
 async function withDB(mutator) {
     for (let attempt = 0; attempt < 6; attempt++) {
-        const { db, version } = await loadDBVersioned();
+        const { db, version, newestCorrupt } = await loadDBVersioned();
         const result = await mutator(db);
         if (result && typeof result === 'object' && result.__noSave) {
             return result.value;
         }
         const now = await blobListVersions();
         const newest = now.length ? now[0].pathname : null;
-        if (newest !== version) {
+        if (newestCorrupt) {
+            if (newest !== newestCorrupt) {
+                continue; // a newer version appeared; retry on fresh state
+            }
+            console.error(`blob newest version unreadable, superseding: ${newestCorrupt}`);
+        } else if (newest !== version) {
             continue; // lost the race; retry on the fresh version
         }
         await saveDB(db);
@@ -294,6 +308,17 @@ const verifyToken = (token) => {
         return null;
     }
     const [header, body, sig] = parts;
+    // Explicitly reject non-HS256 headers (audit fix): the signature
+    // check below would already fail a forged token, but accepting only
+    // the algorithm we issue keeps the contract explicit.
+    try {
+        const headerJson = JSON.parse(Buffer.from(header.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString());
+        if (headerJson.alg !== 'HS256') {
+            return null;
+        }
+    } catch {
+        return null;
+    }
     let expected;
     try {
         expected = crypto.createHmac('sha256', authSecret())
@@ -321,6 +346,10 @@ const verifyToken = (token) => {
 // Admin tokens carry a token-version claim (tv); changing the admin
 // password bumps settings.token_version and thereby revokes every token
 // issued before the change (audit fix).
+// A present-but-invalid Bearer token (bad signature, expired, or stale
+// tv) returns null immediately instead of falling through to the guest
+// key check (audit fix): a dashboard holding a dead session must see a
+// clear 401, not confusing guest behaviour.
 const getAuth = (req, db) => {
     const auth = req.headers.authorization || '';
     if (auth.startsWith('Bearer ')) {
@@ -328,6 +357,7 @@ const getAuth = (req, db) => {
         if (payload && (payload.tv ?? -1) === (db.settings.token_version ?? 0)) {
             return { admin: payload };
         }
+        return null;
     }
     const key = req.headers['x-access-key'];
     if (key && key === db.settings.access_key) {
@@ -418,13 +448,30 @@ const rateLimit = (bucket, limit, windowMs) => {
     }
     entry.count += 1;
     if (rateBuckets.size > 5000) {
-        rateBuckets.clear();
+        // Evict oldest buckets first (audit fix): wiping the whole map
+        // would reset every attacker's counter along with everyone else's.
+        for (const k of rateBuckets.keys()) {
+            rateBuckets.delete(k);
+            if (rateBuckets.size <= 5000) {
+                break;
+            }
+        }
     }
     return entry.count <= limit;
 };
 
-const clientIp = (req) =>
-    String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+const rateReset = (bucket) => {
+    rateBuckets.delete(String(bucket));
+};
+
+const clientIp = (req) => {
+    // X-Forwarded-For is a chain: earlier entries are client-controlled
+    // and trivially spoofed. Vercel's trusted edge appends the actual
+    // connecting IP last, so only the last entry is trusted (audit fix).
+    const chain = String(req.headers['x-forwarded-for'] || '')
+        .split(',').map((s) => s.trim()).filter(Boolean);
+    return chain.length ? chain[chain.length - 1] : 'unknown';
+};
 
 // ---------- comments ----------
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
@@ -461,7 +508,7 @@ const parsePresence = (value) => {
     if (value === false || value === 2 || value === '2' || value === 0 || value === '0') {
         return false;
     }
-    if (value === 3 || value === '3') {
+    if (value === 3 || value === '3' || value === 'ragu') {
         return 'ragu';
     }
     return null;
@@ -550,7 +597,7 @@ module.exports = {
     loadDB, loadDBVersioned, saveDB, withDB, noSave,
     hashPassword, verifyPassword, isLegacyHash,
     signToken, verifyToken, getAuth,
-    send, sendError, fail, httpError, readBody, rateLimit, clientIp,
+    send, sendError, fail, httpError, readBody, rateLimit, rateReset, clientIp,
     formatDate, filterBadWords, parsePresence, toPublic, buildTree,
     findComment, findByOwn, commentDepth, removeSubtree, countAll, countLikes,
     defaultSite, countFollows,

@@ -37,7 +37,10 @@ module.exports = async (req, res) => {
         if (!kind || !ext) {
             return sendError(res, 400, 'Jenis file tidak didukung.');
         }
-        const rawBase64 = String(body.dataBase64 || '').replace(/\s+/g, '');
+        if (typeof body.dataBase64 !== 'string') {
+            return sendError(res, 400, 'Format file tidak valid.');
+        }
+        const rawBase64 = body.dataBase64.replace(/\s+/g, '');
         const data = Buffer.from(rawBase64, 'base64');
         if (data.length === 0) {
             return sendError(res, 400, 'File kosong.');
@@ -51,7 +54,9 @@ module.exports = async (req, res) => {
         if (data.length > MAX_BYTES) {
             return sendError(res, 400, 'Ukuran file melebihi batas 3 MB.');
         }
-        const name = `media-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${ext}`;
+        // 64 bits of randomness (audit fix): the old 32-bit suffix was
+        // guessable against the unauthenticated media proxy.
+        const name = `media-${Date.now()}-${crypto.randomBytes(8).toString('hex')}.${ext}`;
         const put = await fetch(`${BLOB_API}?pathname=${encodeURIComponent(name)}`, {
             method: 'PUT',
             headers: {

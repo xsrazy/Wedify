@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const {
     loadDB, withDB, getAuth, send, sendError, fail, httpError, readBody,
     clientIp, rateLimit, filterBadWords, parsePresence, toPublic, buildTree,
-    findComment, commentDepth, formatDate,
+    findComment, commentDepth,
 } = require('../_lib');
 
 const MAX_NAME = 100;
@@ -29,6 +29,13 @@ module.exports = async (req, res) => {
         }
 
         if (req.method === 'POST') {
+            // Auth first (audit fix): unauthenticated requests get 401
+            // before any body parsing or validation runs.
+            const preDb = await loadDB();
+            const preAuth = getAuth(req, preDb);
+            if (!preAuth) {
+                return sendError(res, 401, 'Invalid access key');
+            }
             const body = await readBody(req);
             const name = String(body.name || '').trim();
             let text = String(body.comment || '').trim();
@@ -49,7 +56,12 @@ module.exports = async (req, res) => {
                 return sendError(res, 400, 'Konfirmasi kehadiran tidak valid.');
             }
             // Throttle guest comment floods (audit fix); admins exempt.
+            // Checked once here, not inside the mutator, so a withDB
+            // retry can never burn extra quota (audit fix).
             const ip = clientIp(req);
+            if (!preAuth.admin && !rateLimit(`comment:${ip}`, 20, 60 * 1000)) {
+                return sendError(res, 429, 'Terlalu banyak komentar. Coba lagi nanti.');
+            }
             const parentId = body.id ? String(body.id) : null;
 
             const payload = await withDB(async (db) => {
@@ -58,9 +70,6 @@ module.exports = async (req, res) => {
                     throw httpError(401, 'Invalid access key');
                 }
                 const isAdmin = Boolean(auth.admin);
-                if (!isAdmin && !rateLimit(`comment:${ip}`, 20, 60 * 1000)) {
-                    throw httpError(429, 'Terlalu banyak komentar. Coba lagi nanti.');
-                }
                 if (parentId) {
                     if (!db.settings.can_reply && !isAdmin) {
                         throw httpError(403, 'Balasan komentar sedang dimatikan.');
@@ -74,14 +83,16 @@ module.exports = async (req, res) => {
                     }
                 }
                 let finalText = text;
+                let finalName = name;
                 if (db.settings.is_filter) {
                     finalText = filterBadWords(finalText);
+                    finalName = filterBadWords(finalName);
                 }
                 const comment = {
                     uuid: crypto.randomUUID(),
                     own: crypto.randomUUID(),
                     parent: parentId,
-                    name,
+                    name: finalName,
                     presence,
                     comment: finalText,
                     is_admin: isAdmin,
@@ -91,17 +102,12 @@ module.exports = async (req, res) => {
                     likes: [],
                 };
                 db.comments.push(comment);
-                return {
-                    uuid: comment.uuid,
-                    own: comment.own,
-                    name: comment.name,
-                    presence: comment.presence,
-                    comment: comment.comment,
-                    is_admin: comment.is_admin,
-                    created_at: formatDate(comment.created_at),
-                    comments: [],
-                    like: { love: 0 },
-                };
+                // One shared serializer (audit fix): POST returns the same
+                // shape as GET, including pinned. The creator also gets
+                // their own token back so they can edit/delete it later.
+                const pub = toPublic(comment, new Map(), isAdmin);
+                pub.own = comment.own;
+                return pub;
             });
             return send(res, 201, payload);
         }

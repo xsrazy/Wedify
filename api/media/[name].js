@@ -26,7 +26,9 @@ module.exports = async (req, res) => {
         };
         const listRes = await fetch(`${BLOB_API}?prefix=${encodeURIComponent(name)}&limit=10`, { headers });
         if (!listRes.ok) {
-            return res.status(502).end();
+            // Map a real upstream 404 through instead of a generic 502
+            // (audit fix); anything else stays a bad-gateway.
+            return res.status(listRes.status === 404 ? 404 : 502).end();
         }
         const list = await listRes.json();
         const blob = (list.blobs || []).find((b) => b.pathname === name);
@@ -39,7 +41,11 @@ module.exports = async (req, res) => {
         }
         const fileRes = await fetch(blob.url, { headers: fetchHeaders });
         if (!fileRes.ok && fileRes.status !== 206) {
-            return res.status(502).end();
+            // Map real upstream 404/416 through instead of a generic 502
+            // (audit fix): a missing file is a 404, an unsatisfiable
+            // Range is a 416, not a bad gateway.
+            const mapped = fileRes.status === 404 || fileRes.status === 416 ? fileRes.status : 502;
+            return res.status(mapped).end();
         }
         const ext = name.split('.').pop();
         res.status(fileRes.status);

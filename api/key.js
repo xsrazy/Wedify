@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         if (!auth || !auth.admin) {
             return sendError(res, 401, 'Unauthorized');
         }
-        await withDB(async (fresh) => {
+        const rotated = await withDB(async (fresh) => {
             const innerAuth = getAuth(req, fresh);
             if (!innerAuth || !innerAuth.admin) {
                 return noSave(false);
@@ -19,6 +19,12 @@ module.exports = async (req, res) => {
             fresh.settings.access_key = crypto.randomBytes(24).toString('hex');
             return true;
         });
+        // Audit fix m5: the withDB return must be honoured. If the inner
+        // auth failed (token revoked mid-flight), rotation did not happen
+        // and the caller must not hear "success".
+        if (!rotated) {
+            return sendError(res, 401, 'Unauthorized');
+        }
         return send(res, 200, { status: true });
     } catch (err) {
         return fail(res, err);
