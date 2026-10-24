@@ -1,1 +1,0 @@
-export const bootstrap = window.bootstrap;
