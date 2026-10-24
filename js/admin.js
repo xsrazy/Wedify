@@ -32,6 +32,16 @@ export const admin = (() => {
             document.getElementById('editComment').checked = Boolean(res.data.can_edit);
             document.getElementById('deleteComment').checked = Boolean(res.data.can_delete);
             site.fill(res.data.site);
+
+            // Feed the comment action-button guards in card.js. They used
+            // to fall back to "show everything" because this table was
+            // never populated (audit fix); refresh the list so the buttons
+            // match the toggles even when /api/comment won the race.
+            const config = storage('config');
+            config.set('can_reply', res.data.can_reply);
+            config.set('can_edit', res.data.can_edit);
+            config.set('can_delete', res.data.can_delete);
+            comment.comment();
         });
 
         request(HTTP_GET, '/api/stats').token(session.getToken()).send().then((res) => {
@@ -39,6 +49,10 @@ export const admin = (() => {
             document.getElementById('count-like').innerHTML = res.data.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             document.getElementById('count-present').innerHTML = res.data.present.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             document.getElementById('count-absent').innerHTML = res.data.absent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            const unsureEl = document.getElementById('count-unsure');
+            if (unsureEl) {
+                unsureEl.innerHTML = (res.data.unsure ?? 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
             document.getElementById('count-follow-groom').textContent = (res.data.follows_groom ?? 0).toString();
             document.getElementById('count-follow-bride').textContent = (res.data.follows_bride ?? 0).toString();
         });
@@ -69,6 +83,8 @@ export const admin = (() => {
                     can_reply: Boolean(checkbox.checked)
                 }).
                 send();
+            storage('config').set('can_reply', Boolean(checkbox.checked));
+            comment.comment();
         } finally {
             label.restore();
         }
@@ -84,6 +100,8 @@ export const admin = (() => {
                     can_edit: Boolean(checkbox.checked)
                 }).
                 send();
+            storage('config').set('can_edit', Boolean(checkbox.checked));
+            comment.comment();
         } finally {
             label.restore();
         }
@@ -99,6 +117,8 @@ export const admin = (() => {
                     can_delete: Boolean(checkbox.checked)
                 }).
                 send();
+            storage('config').set('can_delete', Boolean(checkbox.checked));
+            comment.comment();
         } finally {
             label.restore();
         }
@@ -157,7 +177,13 @@ export const admin = (() => {
             old.value = null;
             newest.value = null;
             button.disabled = true;
-            alert('Success change password');
+            // A password change bumps token_version, revoking every token
+            // including this session's. Log out and ask for a re-login
+            // instead of leaving a dashboard whose calls all 401 (audit fix).
+            alert('Password berhasil diubah. Silakan login kembali.');
+            user.clear();
+            session.logout();
+            bootstrap.Modal.getOrCreateInstance('#loginModal').show();
         }
     };
 

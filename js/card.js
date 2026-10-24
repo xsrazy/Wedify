@@ -136,7 +136,7 @@ export const card = (() => {
         }
 
         if (is_parent) {
-            return `<strong class="me-1">${util.escapeHtml(comment.name)}</strong><i id="badge-${comment.uuid}" class="fa-solid ${comment.presence ? 'fa-circle-check text-success' : 'fa-circle-xmark text-danger'}"></i>`;
+            return `<strong class="me-1">${util.escapeHtml(comment.name)}</strong><i id="badge-${comment.uuid}" class="fa-solid ${comment.presence === 'ragu' ? 'fa-circle-question text-warning' : comment.presence ? 'fa-circle-check text-success' : 'fa-circle-xmark text-danger'}"></i>`;
         }
 
         return `<strong>${util.escapeHtml(comment.name)}</strong>`;
@@ -194,8 +194,9 @@ export const card = (() => {
         <label for="form-inner-${id}" class="form-label" style="font-size: 0.95rem;"><i class="fa-solid fa-pen me-1"></i>Edit</label>
         ${document.getElementById(id).getAttribute('data-parent') === 'true' && !session.isAdmin() ? `
         <select class="form-select shadow-sm mb-2 rounded-4" id="form-inner-presence-${id}" offline-disabled>
-            <option value="1" ${presence ? 'selected' : ''}>Datang</option>
-            <option value="2" ${presence ? '' : 'selected'}>Berhalangan</option>
+            <option value="1" ${presence === true ? 'selected' : ''}>Datang</option>
+            <option value="2" ${presence === false ? 'selected' : ''}>Berhalangan</option>
+            <option value="3" ${presence === 'ragu' ? 'selected' : ''}>Masih Ragu</option>
         </select>` : ''}
         <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" placeholder="Type update comment" rows="3" offline-disabled></textarea>
         <div class="d-flex flex-wrap justify-content-end align-items-center mb-0">

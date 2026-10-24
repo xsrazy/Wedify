@@ -7,7 +7,7 @@ export const navbar = (() => {
      * @returns {void}
      */
     const setActive = (btn) => {
-        ['button-mobile-home', 'button-mobile-setting', 'button-mobile-guest'].forEach((id) => {
+        ['button-mobile-home', 'button-mobile-setting', 'button-mobile-guest', 'button-mobile-konten'].forEach((id) => {
             const el = document.getElementById(id);
             if (el) {
                 el.classList.remove('active');
@@ -39,9 +39,19 @@ export const navbar = (() => {
         setActive(btn);
     };
 
+    /**
+     * @param {HTMLElement} btn
+     * @returns {void}
+     */
+    const buttonNavKonten = (btn) => {
+        bootstrap.Tab.getOrCreateInstance(document.getElementById('button-konten')).show();
+        setActive(btn);
+    };
+
     return {
         buttonNavHome,
         buttonNavSetting,
         buttonNavGuest,
+        buttonNavKonten,
     };
 })();

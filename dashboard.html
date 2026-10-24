@@ -15,8 +15,8 @@
     <meta name="color-scheme" content="dark light">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="canonical" href="https://wedify.xsrazy.web.id/dashboard">
-    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/favicon.ico">
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="./assets/images/icon-512x512.png">
     <link rel="apple-touch-icon" sizes="192x192" href="./assets/images/apple-touch-icon.png">
@@ -68,6 +68,12 @@
                 <button class="nav-link" onclick="admin.navbar.buttonNavGuest(this)" id="button-mobile-guest">
                     <i class="fa-solid fa-users"></i>
                     <span class="d-block" style="font-size: 0.7rem;">Tamu</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="admin.navbar.buttonNavKonten(this)" id="button-mobile-konten">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span class="d-block" style="font-size: 0.7rem;">Konten</span>
                 </button>
             </li>
         </ul>
@@ -207,6 +213,28 @@
                                             </div>
                                             <div class="d-none d-md-block d-lg-block d-xl-block">
                                                 <i class="fa-solid fa-circle-xmark fa-2x me-2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-xl-3 col-6 mb-3">
+                                <div class="rounded-4 shadow p-3 border-0" style="background: #B98A1E;">
+                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
+                                        <div class="col-9">
+                                            <p class="fw-bold m-0 p-0">Masih Ragu</p>
+                                            <h6 class="fw-bold m-0 p-0" id="count-unsure">
+                                                <div class="placeholder-wave">
+                                                    <span class="placeholder col-8 rounded-3"></span>
+                                                </div>
+                                            </h6>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <div class="d-md-none d-lg-none d-xl-none">
+                                                <i class="fa-solid fa-circle-question me-2" style="font-size: 1.5em;"></i>
+                                            </div>
+                                            <div class="d-none d-md-block d-lg-block d-xl-block">
+                                                <i class="fa-solid fa-circle-question fa-2x me-2"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -649,7 +677,7 @@
                                 <input type="tel" class="form-control form-control-sm rounded-4" id="guest-phone" placeholder="cth: 081234567890" offline-disabled>
                             </div>
 
-                            <p class="m-0 p-0 text-break" style="font-size: 0.85rem;">Link: <span id="guest-link-preview">https://nikah.xsrazy.web.id/?to=Nama+Tamu</span></p>
+                            <p class="m-0 p-0 text-break" style="font-size: 0.85rem;">Link: <span id="guest-link-preview">https://wedify.xsrazy.web.id/?to=Nama+Tamu</span></p>
 
                             <div class="d-flex flex-wrap gap-2 mt-3">
                                 <a class="btn btn-success btn-sm rounded-4" id="guest-wa-button" target="_blank" rel="noopener" href="#"><i class="fa-brands fa-whatsapp me-1"></i>Kirim via WhatsApp</a>

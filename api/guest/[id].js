@@ -1,4 +1,4 @@
-const { loadDB, withDB, noSave, getAuth, send, sendError, fail } = require('../_lib');
+const { loadDB, withDB, noSave, getAuth, send, sendError, fail, httpError } = require('../_lib');
 
 // DELETE /api/guest/:id (admin only) -> { status }
 module.exports = async (req, res) => {
@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
             const before = fresh.guests.length;
             fresh.guests = fresh.guests.filter((g) => g.id !== id);
             if (fresh.guests.length === before) {
-                return noSave(false);
+                throw httpError(404, 'Tamu tidak ditemukan.');
             }
             return true;
         });

@@ -60,22 +60,27 @@ export const comment = (() => {
     const update = async (button) => {
         const id = button.getAttribute('data-uuid');
 
-        let isPresent = false;
+        // Tri-state presence: '1' = Datang, '2' = Berhalangan, '3' = Ragu.
+        // The badge mirrors it (check / xmark / question), so the no-change
+        // comparison must use the same tri-state on both sides (audit fix).
+        let presenceVal = null;
         const presence = document.getElementById(`form-inner-presence-${id}`);
         if (presence) {
             presence.disabled = true;
-            isPresent = presence.value === '1';
+            presenceVal = presence.value;
         }
 
         const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
 
-        let isChecklist = false;
+        let badgeState = null;
         const badge = document.getElementById(`badge-${id}`);
         if (badge) {
-            isChecklist = badge.classList.contains('text-success');
+            badgeState = badge.classList.contains('text-success') ? '1'
+                : badge.classList.contains('text-warning') ? '3' : '2';
         }
 
-        if (id && util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) {
+        const presenceUnchanged = !presence || !badge || badgeState === presenceVal;
+        if (id && util.base64Encode(form.value) === form.getAttribute('data-original') && presenceUnchanged) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
             return;
@@ -92,7 +97,7 @@ export const comment = (() => {
 
         const status = await request(HTTP_PUT, '/api/comment/' + owns.get(id))
             .token(session.getToken())
-            .body(dto.updateCommentRequest(presence ? isPresent : null, form.value))
+            .body(dto.updateCommentRequest(presence ? (presenceVal === '1' ? true : presenceVal === '3' ? 3 : false) : null, form.value))
             .send(dto.statusResponse)
             .then((res) => res.data.status, () => false);
 
@@ -124,29 +129,37 @@ export const comment = (() => {
         }
 
         if (presence) {
-            document.getElementById('form-presence').value = isPresent ? '1' : '2';
-            storage('information').set('presence', isPresent);
+            // The dashboard has no #form-presence element; guard so a
+            // successful edit does not throw after saving (audit fix).
+            const mainPresence = document.getElementById('form-presence');
+            if (mainPresence) {
+                mainPresence.value = presenceVal;
+            }
+            storage('information').set('presence', presenceVal === '1' ? true : presenceVal === '3' ? 'ragu' : false);
         }
 
         if (!presence || !badge) {
             return;
         }
 
-        if (isPresent) {
-            badge.classList.remove('fa-circle-xmark', 'text-danger');
+        badge.classList.remove('fa-circle-check', 'fa-circle-xmark', 'fa-circle-question', 'text-success', 'text-danger', 'text-warning');
+        if (presenceVal === '1') {
             badge.classList.add('fa-circle-check', 'text-success');
-            return;
+        } else if (presenceVal === '3') {
+            badge.classList.add('fa-circle-question', 'text-warning');
+        } else {
+            badge.classList.add('fa-circle-xmark', 'text-danger');
         }
-
-        badge.classList.remove('fa-circle-check', 'text-success');
-        badge.classList.add('fa-circle-xmark', 'text-danger');
     };
 
     const send = async (button) => {
         const id = button.getAttribute('data-uuid');
 
         const name = document.getElementById('form-name');
-        let nameValue = name.value;
+        // #form-name is the Setting tab's display-name input on the
+        // dashboard, not a comment field; guard so a rename can never break
+        // admin comment posting (audit fix). Admins overwrite it below.
+        let nameValue = name?.value ?? '';
 
         if (session.isAdmin()) {
             nameValue = user.get('name');
@@ -267,19 +280,21 @@ export const comment = (() => {
     const cancel = (id) => {
         const form = document.getElementById(`form-inner-${id}`);
 
-        let isPresent = false;
+        let presenceVal = null;
         const presence = document.getElementById(`form-inner-presence-${id}`);
         if (presence) {
-            isPresent = presence.value === '1';
+            presenceVal = presence.value;
         }
 
-        let isChecklist = false;
+        let badgeState = null;
         const badge = document.getElementById(`badge-${id}`);
         if (badge) {
-            isChecklist = badge.classList.contains('text-success');
+            badgeState = badge.classList.contains('text-success') ? '1'
+                : badge.classList.contains('text-warning') ? '3' : '2';
         }
 
-        if (form.value.length === 0 || (util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) || confirm('Are you sure?')) {
+        const presenceUnchanged = !presence || !badge || badgeState === presenceVal;
+        if (form.value.length === 0 || (util.base64Encode(form.value) === form.getAttribute('data-original') && presenceUnchanged) || confirm('Are you sure?')) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
         }

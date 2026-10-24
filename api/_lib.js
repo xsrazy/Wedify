@@ -363,16 +363,25 @@ const httpError = (status, message) => {
 };
 
 const readBody = async (req) => {
+    // Vercel parses JSON bodies lazily: merely READING req.body throws when
+    // the client sent malformed JSON with an application/json content type.
+    // Guard the getter so that becomes a 400 instead of a 500.
+    let body;
+    try {
+        body = req.body;
+    } catch {
+        throw httpError(400, 'Format data tidak valid.');
+    }
     let parsed;
-    if (req.body !== undefined && req.body !== null) {
-        if (typeof req.body === 'string') {
+    if (body !== undefined && body !== null) {
+        if (typeof body === 'string') {
             try {
-                parsed = req.body ? JSON.parse(req.body) : {};
+                parsed = body ? JSON.parse(body) : {};
             } catch {
                 throw httpError(400, 'Format data tidak valid.');
             }
         } else {
-            parsed = req.body;
+            parsed = body;
         }
     } else {
         const chunks = [];
@@ -451,6 +460,9 @@ const parsePresence = (value) => {
     }
     if (value === false || value === 2 || value === '2' || value === 0 || value === '0') {
         return false;
+    }
+    if (value === 3 || value === '3') {
+        return 'ragu';
     }
     return null;
 };

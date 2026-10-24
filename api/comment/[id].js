@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const {
-    loadDB, withDB, noSave, getAuth, send, sendError, fail, readBody, clientIp,
+    loadDB, withDB, noSave, getAuth, send, sendError, fail, httpError, readBody, clientIp,
     filterBadWords, parsePresence, findComment, findByOwn, removeSubtree, formatDate,
 } = require('../_lib');
 
@@ -100,30 +100,40 @@ module.exports = async (req, res) => {
                 // may use the public uuid.
                 const target = findByOwn(db, id) || (isAdmin ? findComment(db, id) : null);
                 if (!target) {
-                    return noSave(false);
+                    throw httpError(404, 'Komentar tidak ditemukan.');
                 }
                 if (req.method === 'PUT') {
                     if (!db.settings.can_edit && !isAdmin) {
-                        return noSave(false);
+                        throw httpError(403, 'Mengubah komentar sedang dimatikan.');
                     }
                     let text = String(body.comment ?? target.comment).trim();
-                    if (text.length === 0 || text.length > MAX_COMMENT) {
-                        return noSave(false);
+                    if (text.length === 0) {
+                        throw httpError(400, 'Komentar tidak boleh kosong.');
+                    }
+                    if (text.length > MAX_COMMENT) {
+                        throw httpError(400, 'Komentar terlalu panjang.');
                     }
                     if (db.settings.is_filter) {
                         text = filterBadWords(text);
                     }
-                    target.comment = text;
+                    let newPresence = null;
                     if (body.presence !== null && body.presence !== undefined) {
-                        const presence = parsePresence(body.presence);
-                        if (presence !== null) {
-                            target.presence = presence;
-                        }
+                        newPresence = parsePresence(body.presence);
+                    }
+                    // A request that changes nothing is a client error, not
+                    // a silent success (audit fix). This also covers the
+                    // malformed-body-swallowed-to-{} case above.
+                    if (text === target.comment && (newPresence === null || newPresence === target.presence)) {
+                        throw httpError(400, 'Tidak ada perubahan.');
+                    }
+                    target.comment = text;
+                    if (newPresence !== null) {
+                        target.presence = newPresence;
                     }
                     return true;
                 }
                 if (!db.settings.can_delete && !isAdmin) {
-                    return noSave(false);
+                    throw httpError(403, 'Menghapus komentar sedang dimatikan.');
                 }
                 removeSubtree(db, target.uuid);
                 return true;

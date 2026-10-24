@@ -37,9 +37,16 @@ module.exports = async (req, res) => {
         if (!kind || !ext) {
             return sendError(res, 400, 'Jenis file tidak didukung.');
         }
-        const data = Buffer.from(String(body.dataBase64 || ''), 'base64');
+        const rawBase64 = String(body.dataBase64 || '').replace(/\s+/g, '');
+        const data = Buffer.from(rawBase64, 'base64');
         if (data.length === 0) {
             return sendError(res, 400, 'File kosong.');
+        }
+        // Buffer.from silently drops invalid characters, so garbage would
+        // otherwise be stored as a media file. A round-trip re-encode must
+        // reproduce the input exactly (audit fix).
+        if (data.toString('base64') !== rawBase64) {
+            return sendError(res, 400, 'Format file tidak valid.');
         }
         if (data.length > MAX_BYTES) {
             return sendError(res, 400, 'Ukuran file melebihi batas 3 MB.');

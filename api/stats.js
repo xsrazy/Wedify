@@ -14,8 +14,11 @@ module.exports = async (req, res) => {
         return send(res, 200, {
             comments: countAll(db),
             likes: countLikes(db),
-            present: topLevel.filter((c) => c.presence).length,
-            absent: topLevel.filter((c) => !c.presence).length,
+            // Strict equality: 'ragu' is truthy, so a loose filter would
+            // silently count unsure guests as present.
+            present: topLevel.filter((c) => c.presence === true).length,
+            absent: topLevel.filter((c) => c.presence === false).length,
+            unsure: topLevel.filter((c) => c.presence === 'ragu').length,
             follows_groom: countFollows(db, 'groom'),
             follows_bride: countFollows(db, 'bride'),
         });

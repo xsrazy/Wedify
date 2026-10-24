@@ -108,7 +108,13 @@ $("#openBtn").addEventListener("click", () => {
 document.body.style.overflow = "hidden"; // kunci scroll selama cover tampil
 
 // ---- Countdown ----
-let targetMs = new Date(SITE.wedding_iso).getTime();
+// An empty/invalid wedding_iso must never turn the cells into NaN: keep
+// the previous (or default) target instead (audit fix).
+const toTargetMs = (iso, fallback) => {
+  const t = new Date(iso).getTime();
+  return Number.isFinite(t) ? t : fallback;
+};
+let targetMs = toTargetMs(SITE.wedding_iso, new Date(DEFAULT_SITE.wedding_iso).getTime());
 function tickCountdown() {
   const diff = Math.max(0, targetMs - Date.now());
   const d = Math.floor(diff / 86400000);
@@ -259,7 +265,8 @@ function findWish(list, uuid) {
 
 function wishHtml(w) {
   const absent = w.presence === false;
-  const badge = absent ? "Berhalangan" : "Datang";
+  const unsure = w.presence === 'ragu';
+  const badge = absent ? "Berhalangan" : unsure ? "Masih Ragu" : "Datang";
   const ownMap = store.get(OWN_KEY);
   const likeMap = store.get(LIKE_KEY);
   const liked = Boolean(likeMap[w.uuid]);
@@ -268,7 +275,7 @@ function wishHtml(w) {
   let h = '<div class="wish" data-uuid="' + w.uuid + '">';
   h += '<div class="wish-head"><span class="wish-name">' + esc(w.name) +
     (w.is_admin ? ' <span class="wish-admin">Admin</span>' : "") +
-    '</span><span class="wish-badge' + (absent ? " absent" : "") + '">' + badge + "</span></div>";
+    '</span><span class="wish-badge' + (absent ? " absent" : unsure ? " unsure" : "") + '">' + badge + "</span></div>";
   if (editingFor === w.uuid) {
     h += '<form class="wish-edit-form" data-edit-form="' + w.uuid + '">' +
       '<textarea class="f-in" name="emsg" rows="3" maxlength="500" required>' + esc(w.comment) + "</textarea>" +
@@ -409,7 +416,8 @@ $("#wishList").addEventListener("submit", async (e) => {
     const name = String(fd.get("rname") || "").trim();
     const msg = String(fd.get("rmsg") || "").trim();
     if (!name || !msg) return;
-    const presence = $("#wishPresence").value === "Berhalangan" ? 2 : 1;
+    const presenceVal = $("#wishPresence").value;
+    const presence = presenceVal === "Berhalangan" ? 2 : presenceVal === "Masih Ragu" ? 3 : 1;
     try {
       const res = await fetch("/api/comment", {
         method: "POST",
@@ -452,7 +460,8 @@ $("#wishForm").addEventListener("submit", async (e) => {
   const msg = $("#wishMsg").value.trim();
   if (!name || !msg) return;
   if (!ACCESS_KEY) { alert("Buku tamu lagi tidak tersedia, coba lagi nanti."); return; }
-  const presence = $("#wishPresence").value === "Berhalangan" ? 2 : 1;
+  const presenceVal = $("#wishPresence").value;
+  const presence = presenceVal === "Berhalangan" ? 2 : presenceVal === "Masih Ragu" ? 3 : 1;
   const btn = e.target.querySelector('button[type="submit"]');
   btn.disabled = true;
   try {
@@ -561,7 +570,7 @@ function applySite() {
   if (audio && SITE.music_url && audio.getAttribute("src") !== SITE.music_url) {
     audio.src = SITE.music_url;
   }
-  targetMs = new Date(SITE.wedding_iso).getTime();
+  targetMs = toTargetMs(SITE.wedding_iso, targetMs);
   tickCountdown();
   fillArtistView(currentArtist);
   buildShare();

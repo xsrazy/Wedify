@@ -6,7 +6,10 @@ import { request, HTTP_GET, HTTP_POST, HTTP_DELETE } from './request.js';
 // (?to=Name), send them via WhatsApp, and keep a saved guest list.
 export const guests = (() => {
 
-    const SITE = 'https://nikah.xsrazy.web.id';
+    // Invitation links must point at this site itself. location.origin is
+    // used instead of a hardcoded domain so the dashboard never advertises
+    // another wedding site (audit fix).
+    const SITE = location.origin;
 
     const linkFor = (name) => {
         const clean = String(name || '').trim().replace(/\s+/g, ' ');
@@ -137,8 +140,10 @@ export const guests = (() => {
         await request(HTTP_DELETE, `/api/guest/${id}`)
             .token(session.getToken())
             .send()
+            // Reload either way: a 404 means the guest is already gone, so
+            // the list on screen is the truth in both cases (audit fix).
             .then(() => load())
-            .catch(() => null);
+            .catch(() => load());
         btn.restore();
     };
 

@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
                 .slice()
                 .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
             for (const c of siblings) {
-                rows.push([c.uuid, c.parent || '', c.name, c.presence ? 'Datang' : 'Berhalangan',
+                rows.push([c.uuid, c.parent || '', c.name, c.presence === 'ragu' ? 'Masih Ragu' : c.presence ? 'Datang' : 'Berhalangan',
                     c.comment, (c.likes || []).length, c.is_admin ? '1' : '0', c.ip || '',
                     c.user_agent || '', formatDate(c.created_at)]);
                 walk(c.uuid);
