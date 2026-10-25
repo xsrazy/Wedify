@@ -291,3 +291,22 @@ textarea.f-in{resize:vertical}
 .btn-ghost:hover{border-color:#fff}
 .wstat{min-width:0}
 .w-num{overflow-wrap:break-word}
+
+/* ---------- DESKTOP LAYOUT (>=900px): real desktop, still responsive ---------- */
+/* Mobile stays exactly as before: everything below only applies on wide screens. */
+@media (min-width:900px){
+  #app{max-width:1120px}
+  main{padding:28px 32px 130px}
+  .cover-inner{max-width:560px}
+  .cover-art{width:min(78vw,420px)}
+  .hero{padding:30px 28px 24px}
+  .hero-art{width:200px;height:200px}
+  .hero-title{font-size:38px}
+  #albumView{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  #albumView .hero{grid-column:1 / -1;margin-bottom:0}
+  #albumView .card{margin-bottom:0}
+  #albumView .footer{grid-column:1 / -1}
+  .av-photo{height:320px}
+  .av-discog{grid-template-columns:repeat(3,1fr)}
+  .player{width:min(1120px,calc(100vw - 32px))}
+}
