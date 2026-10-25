@@ -310,3 +310,12 @@ textarea.f-in{resize:vertical}
   .av-discog{grid-template-columns:repeat(3,1fr)}
   .player{width:min(1120px,calc(100vw - 32px))}
 }
+
+/* ---------- TABLET LAYOUT (768px-899px): wider single column ---------- */
+@media (min-width:768px) and (max-width:899px){
+  #app{max-width:720px}
+  main{padding:24px 24px 120px}
+  .hero-art{width:172px;height:172px}
+  .hero-title{font-size:32px}
+  .player{width:min(720px,calc(100vw - 24px))}
+}
