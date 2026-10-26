@@ -3,6 +3,7 @@
 A Spotify-style digital wedding invitation with a real backend and admin dashboard: the invitation is an album, the schedule is a tracklist, the music player actually plays, and every word on the page can be edited from the dashboard.
 
 Live demo: https://wedify.xsrazy.web.id
+
 Dashboard: https://wedify.xsrazy.web.id/dashboard
 
 ![Wedify — Usra & Zee: The Wedding Album](assets/images/og-image.jpg)
